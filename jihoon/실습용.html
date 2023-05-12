@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="map" style="width: 50%; height: 500px"></div>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d882269976572c582016903ea3e8c781&libraries=clusterer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
+    <script>
+        const url = 'https://api.odcloud.kr/api/15077586/v1/centers?page=1&perPage=100&serviceKey=y56nrcR50aqQCfbrW4zNSkIQjCQR10mfxAQxmNDOPnT4N%2FBZ0g5jXFaJ0%2FSsXyzrZrvZEmh23Ryp1fCpH4RIeQ%3D%3D';
+    
+         // 인포윈도우 표시 열기
+ function mouseOverListener(map, marker, infoWindow) {
+    return function () {
+        infoWindow.open(map, marker);
+    };
+ }
+     
+ function mouseOutListener(infoWindow) {
+    return function () {
+        infoWindow.close();
+    };
+}
+
+var mapContainer = document.getElementById("map"); // 지도를 표시할 div
+var mapOption = {
+center: new kakao.maps.LatLng(35.13417, 129.11397), // 지도의 중심좌표
+level: 7, // 지도의 확대 레벨
+mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도종류
+};
+
+var map = new kakao.maps.Map(mapContainer, mapOption);
+
+var clusterer = new kakao.maps.MarkerClusterer({
+
+map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+minLevel: 5, // 클러스터 할 최소 지도 레벨
+});
+
+fetch(url)
+.then((res) => res.json())
+.then((resJson) => {
+    var markers = [];
+    // 접종 센터 좌표 리스트
+    var centers = resJson.data;
+    for (var i = 0; i < centers.length; i++) {
+    var lat = centers[i]["lat"];
+    var lng = centers[i]["lng"];
+
+var marker = new kakao.maps.Marker({
+    position: new kakao.maps.LatLng(lat, lng),
+    map: map,
+   });
+
+   var infoWindow = new kakao.maps.InfoWindow({ 
+    content: centers[i]["centerName"],
+ });
+
+ markers.push(marker);
+ kakao.maps.event.addListener(marker, "mouseover", mouseOverListener(map, marker, infoWindow));
+kakao.maps.event.addListener(marker, "mouseout", mouseOutListener(infoWindow));
+}
+clusterer.addMarkers(markers);
+ });
+ </script>
+ <script>
+    // 여기서 부터 노후건물정보 api입니다
+    param = {
+     name:'노후건물정보',
+     serverUrl:'www.safemap.go.kr/openApiService/wms/getLayerData.do?apikey=1Z6OB16K-1Z6O-1Z6O-1Z6O-1Z6OB16K7Q',
+     layername:'A2SM_BILDDN_NEW',
+     styles:'A2SM_BILDDN_NEW' ,
+     service:'WMS'
+    };
+
+    var wmsLayer = new OpenLayers.Layer.WMS (
+     param.name,
+     param.serverUrl,
+     {
+      layers: ''+param.layername,
+      styles:param.styles,
+      format: 'image/png',
+      exceptions:'text/xml',
+      transparent: true
+     },
+     {
+      isBaseLayer: false
+     }
+    );
+ </script>
+</body>
+</html>
