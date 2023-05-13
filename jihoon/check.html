@@ -46,14 +46,15 @@
 }
 
     // CSV 파일 경로를 불러옵니다.
-    fetch('소방서.csv')
+    fetch('소방센터.csv')
         .then(response => response.text())
         .then(csvData => {
             var csvArray = csvData.split('\n');
             for (var i = 1; i < csvArray.length; i++) {
                 var row = csvArray[i].split(',');
-                var name = row[2];
-                var address = row[3];
+                var firestation_name = row[2];
+                var firecenter_name = row[3];
+                var address = row[4];
 
                 // 주소로 좌표를 검색합니다.
                 new kakao.maps.services.Geocoder().addressSearch(address, function(result, status) {
@@ -71,7 +72,7 @@
                         // 원을 생성하고 지도에 표시합니다.
                         var circle = new kakao.maps.Circle({
                             center : new kakao.maps.LatLng(lat, lng),
-                            radius: 500,
+                            radius: 700,
                             strokeWeight: 3,
                             strokeColor: '#B7F0B1',
                             strokeOpacity: 1,
@@ -84,7 +85,6 @@
                 });
             }
         });
-
 
 </script>
 </body>
