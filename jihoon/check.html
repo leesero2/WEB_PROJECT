@@ -2,71 +2,89 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>테스트 서버</title>
+    <title>CSV 파일에서 좌표 읽어오기</title>
     <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d882269976572c582016903ea3e8c781&libraries=services"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
-<div id="map" style="width:100%;height:700px;"></div>
+<div id="map" style="width:100%;height:1000px;"></div>
 
 <script>
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-        mapOption = {
-            center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-            level: 4 // 지도의 확대 레벨
-        };  
+    var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+    var mapOption = {
+        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 기본 중심 좌표
+        level: 4 // 지도의 확대 레벨
+    };
 
     var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
+    // 실시간교통 타일 이미지 추가
+		map.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC); 
 
-    // 해당 함수를 통해 주어진 시간만큼 대기하는 비동기식 함수. 주소 검색 요청사이에 1초의 대기시간을 두어 요청 제한 문제를 해결 (다만 비효율적임 한번 문제를 해결하기위해 다시 알아볼것)
-    function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+    // 지도의 중심 좌표를 현재 위치로 설정합니다.
+    if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
 
-async function processCsvData(csvData) {
-    var csvArray = csvData.split('\n');
-    for (var i = 1; i < csvArray.length; i++) {
-        var row = csvArray[i].split(',');
-        var name = row[2];
-        var address = row[3];
+        var center = new kakao.maps.LatLng(lat, lng);
+        map.setCenter(center);
 
-        // 주소로 좌표를 검색합니다.
-        await new Promise((resolve) => {
-            new kakao.maps.services.Geocoder().addressSearch(address, function(result, status) {
-                if (status === kakao.maps.services.Status.OK) {
-                    var lat = result[0].y;
-                    var lng = result[0].x;
-
-                    // 마커를 생성합니다.
-                    var marker = new kakao.maps.Marker({
-                        position: new kakao.maps.LatLng(lat, lng),
-                        map: map,
-                        title : name
-                    });
-
-                    // 원을 생성하고 지도에 표시합니다.
-                    var circle = new kakao.maps.Circle({
-                        center : new kakao.maps.LatLng(lat, lng),
-                        radius: 500,
-                        strokeWeight: 3,
-                        strokeColor: '#75B8FA',
-                        strokeOpacity: 1,
-                        strokeStyle: 'solid',
-                        fillColor: '#CFE7FF',
-                        fillOpacity: 0.5
-                    });
-                    circle.setMap(map);
-                }
-                setTimeout(resolve, 1000);
-            });
+        // 원을 생성하고 지도에 표시합니다.
+        var circle = new kakao.maps.Circle({
+            center: center,
+            radius: 10, // 10m 반경의 원 생성
+            strokeWeight: 3,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeStyle: 'solid',
+            fillColor: '#FF0000',
+            fillOpacity: 0.3
         });
-    }
+        circle.setMap(map);
+    });
 }
 
-fetch('소방서.csv')
-    .then(response => response.text())
-    .then(processCsvData);
+    // CSV 파일 경로를 불러옵니다.
+    fetch('소방서.csv')
+        .then(response => response.text())
+        .then(csvData => {
+            var csvArray = csvData.split('\n');
+            for (var i = 1; i < csvArray.length; i++) {
+                var row = csvArray[i].split(',');
+                var name = row[2];
+                var address = row[3];
+
+                // 주소로 좌표를 검색합니다.
+                new kakao.maps.services.Geocoder().addressSearch(address, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        var lat = result[0].y;
+                        var lng = result[0].x;
+
+                        // 마커를 생성합니다.
+                        var marker = new kakao.maps.Marker({
+                            position: new kakao.maps.LatLng(lat, lng),
+                            map: map,
+                            title : name
+                        });
+
+                        // 원을 생성하고 지도에 표시합니다.
+                        var circle = new kakao.maps.Circle({
+                            center : new kakao.maps.LatLng(lat, lng),
+                            radius: 500,
+                            strokeWeight: 3,
+                            strokeColor: '#B7F0B1',
+                            strokeOpacity: 1,
+                            strokeStyle: 'solid',
+                            fillColor: '#B7F0B1',
+                            fillOpacity: 0.5
+                        });
+                        circle.setMap(map);
+                    }
+                });
+            }
+        });
+
 
 </script>
 </body>
