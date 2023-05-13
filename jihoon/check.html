@@ -19,7 +19,7 @@
     var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
     // 실시간교통 타일 이미지 추가
-		map.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC); 
+	map.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC); 
 
     // 지도의 중심 좌표를 현재 위치로 설정합니다.
     if ("geolocation" in navigator) {
@@ -85,6 +85,79 @@
                 });
             }
         });
+
+
+        // CSV 파일 경로를 불러옵니다.
+        // fetch('노후건물.csv')
+        // .then(response => response.text())
+        // .then(csvData => {
+        //     var csvArray = csvData.split('\n');
+        //     for (var i = 1; i < Math.min(11, csvArray.length); i++) {
+        //     var row = csvArray[i].split(',');
+        //     var dong = row[2]; // 읍면동 컬럼
+        //     var addressDetail = row[3]; // 상세주소 컬럼
+        //     var address = dong + ' ' + addressDetail; // 읍면동과 상세주소를 합친 주소
+
+        //     // 주소로 좌표를 검색합니다.
+        //     new kakao.maps.services.Geocoder().addressSearch(address, function(result, status) {
+        //         if (status === kakao.maps.services.Status.OK) {
+        //         var lat = result[0].y;
+        //         var lng = result[0].x;
+
+        //         // 마커를 생성합니다.
+        //         var marker = new kakao.maps.Marker({
+        //             position: new kakao.maps.LatLng(lat, lng),
+        //             map: map
+        //         });
+        //         }
+        //     });
+        //     }
+        // });
+
+
+
+        // 노후 건물 이미지 마커의 주소를 설정합니다.
+        var buildingMarkerImageSrc = '위험.png'; // 여기에 원하시는 이미지 파일 URL을 입력해주세요
+
+        // CSV 파일 경로를 불러옵니다.
+        fetch('노후건물.csv')
+        .then(response => response.text())
+        .then(csvData => {
+            var csvArray = csvData.split('\n');
+            for (var i = 1; i < Math.min(11, csvArray.length); i++) {
+            var row = csvArray[i].split(',');
+            var dong = row[2]; // 읍면동 컬럼
+            var addressDetail = row[3]; // 상세주소 컬럼
+            var address = dong + ' ' + addressDetail; // 읍면동과 상세주소를 합친 주소
+
+            // 주소로 좌표를 검색합니다.
+            new kakao.maps.services.Geocoder().addressSearch(address, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                var lat = result[0].y;
+                var lng = result[0].x;
+
+                // 마커 이미지를 생성합니다.
+                var imageSize = new kakao.maps.Size(30, 30),
+                    imageOptions = {
+                    spriteOrigin: new kakao.maps.Point(0, 0),
+                    spriteSize: new kakao.maps.Size(30, 30),
+                    };
+                var markerImage = new kakao.maps.MarkerImage(buildingMarkerImageSrc, imageSize, imageOptions);
+
+                // 마커를 생성합니다.
+                var marker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(lat, lng),
+                    map: map,
+                    image: markerImage,
+                });
+                }
+            });
+            }
+        });
+
+
+
+
 
 </script>
 </body>
