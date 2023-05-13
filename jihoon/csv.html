@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CSV 파일에서 좌표 읽어오기</title>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=발급받은_앱_키"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div id="map" style="width:100%;height:350px;"></div>
+
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        mapOption = {
+            center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };  
+
+    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+    // CSV 파일을 읽어옵니다.
+    $.get('csv파일경로', function(csvData) {
+        var csvArray = csvData.split('\n');
+        for (var i=0; i<csvArray.length; i++) {
+            var row = csvArray[i].split(',');
+            var lat = row[0];
+            var lng = row[1];
+            var name = row[2];
+
+            // 마커를 생성합니다.
+            var marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(lat, lng),
+                map: map,
+                title : name
+            });
+        }
+    });
+</script>
+</body>
+</html>
