@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c5399006405c2e57b967f4927e409e76&libraries=services"></script>
+</head>
+
+<body>
+    <div id="map" style="width: 100%; height: 1000px"></div>
+    <script>
+        const url_fireinfo = 'https://api.odcloud.kr/api/15086458/v1/uddi:c34efea2-ff75-43c2-9203-d29d7f9c6708?page=1&perPage=100&serviceKey=0D0v2Q2hxIThZmHHWv0XEQN7P9uI%2BV4VY%2BcXg%2BpakTWFNEz9FuobOPSU4%2Fj%2FLUZrXRFcvWkSrc4fo%2B79pvi%2FWg%3D%3D';
+        const url_firestation = 'https://api.odcloud.kr/api/15048243/v1/uddi:818f12a7-70c1-4aff-81a0-80d5db5be9fb?page=1&perPage=100&serviceKey=0D0v2Q2hxIThZmHHWv0XEQN7P9uI%2BV4VY%2BcXg%2BpakTWFNEz9FuobOPSU4%2Fj%2FLUZrXRFcvWkSrc4fo%2B79pvi%2FWg%3D%3D';
+        const url_119station = 'https://api.odcloud.kr/api/15065056/v1/uddi:26c81fc7-9e59-4868-883f-965570d4cc38?page=1&perPage=100&serviceKey=0D0v2Q2hxIThZmHHWv0XEQN7P9uI%2BV4VY%2BcXg%2BpakTWFNEz9FuobOPSU4%2Fj%2FLUZrXRFcvWkSrc4fo%2B79pvi%2FWg%3D%3D';
+
+
+        var mapContainer = document.getElementById("map"); // 지도를 표시할 div
+        var mapOption = {
+            center: new kakao.maps.LatLng(37.566535, 126.9779692), // 지도의 중심좌표
+            level: 7, // 지도의 확대 레벨
+            mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
+        };
+
+        function dataset(finame, fsname, fiaddress) { //두 데이터를 비교하여 같은 이름이면 그 지역의 주소를 돌려주는 함수
+            if(fireinfo == fsname) {
+                return fiaddress;
+            }
+            else {
+                return 0;
+            }  
+        }
+
+        function createCircle() { //원을 생성하는 함수
+
+
+        }
+
+        function createLine() { // 선을 생성하는 함수
+
+
+        }
+
+        function connect() { //선을 연결하는 함수
+
+
+        }
+
+        function diff() {
+            var difftime;
+
+            return difftime;
+        }
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        fetch(url_fireinfo)
+            .then((res) => res.json())
+            .then((resJson) => {
+                var fireinfo = resJson.data;
+
+                fetch(url_firestation)
+                    .then((res) => res.json())
+                    .then((resJson) => {
+                        var firestation = resJson.data;
+
+                        fetch(url_119station)
+                            .then((res) => res.json())
+                            .then((resJson) => {
+                                var fire119 = resJson.data;
+
+
+                            });
+                    });
+            });
+
+    </script>
+</body>
+
+</html>
