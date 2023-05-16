@@ -7,7 +7,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
-<div id="map" style="width:100%;height:1000px;"></div>
+<div id="map" style="width:100%;height:1300px;"></div>
 
 <script>
     var mapContainer = document.getElementById('map'); // 지도를 표시할 div
@@ -72,7 +72,7 @@
                         // 원을 생성하고 지도에 표시합니다.
                         var circle = new kakao.maps.Circle({
                             center : new kakao.maps.LatLng(lat, lng),
-                            radius: 700,
+                            radius: 1000,
                             strokeWeight: 3,
                             strokeColor: '#B7F0B1',
                             strokeOpacity: 1,
@@ -124,7 +124,7 @@
         .then(response => response.text())
         .then(csvData => {
             var csvArray = csvData.split('\n');
-            for (var i = 1; i < Math.min(11, csvArray.length); i++) {
+            for (var i = 1; i < Math.min(1000, csvArray.length); i++) {
             var row = csvArray[i].split(',');
             var dong = row[2]; // 읍면동 컬럼
             var addressDetail = row[3]; // 상세주소 컬럼
