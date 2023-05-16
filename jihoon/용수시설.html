@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>카카오 지도 API</title>
+</head>
+<body>
+	<div id="map" style="width:100%;height:1000px;"></div>
+
+	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d882269976572c582016903ea3e8c781&libraries=services"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script>
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		    mapOption = {
+		        center: new kakao.maps.LatLng(37.56682, 126.97865), // 지도의 중심좌표
+		        level: 3, // 지도의 확대 레벨
+		        mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도종류
+		    }; 
+
+		// 지도를 생성한다 
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
+
+		var xhr = new XMLHttpRequest();
+		var url = 'http://api.data.go.kr/openapi/tn_pubr_public_ffus_wtrcns_api'; // URL
+		var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + 'y56nrcR50aqQCfbrW4zNSkIQjCQR10mfxAQxmNDOPnT4N%2FBZ0g5jXFaJ0%2FSsXyzrZrvZEmh23Ryp1fCpH4RIeQ%3D%3D'; // Service Key
+		queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); // 페이지 번호
+		queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('100'); // 한 페이지 결과 수
+		queryParams += '&' + encodeURIComponent('type') + '=' + encodeURIComponent('json'); // JSON
+		
+		xhr.open('GET', url + queryParams);
+		xhr.onreadystatechange = function () {
+		    if (this.readyState == 4) {
+		        var data = JSON.parse(this.responseText);
+		        var items = data.response.body.items;
+		        for (var i = 0; i < items.length; i++) {
+		            var item = items[i];
+		            var marker = new kakao.maps.Marker({
+		                position: new kakao.maps.LatLng(item.latitude, item.longitude), // 마커의 좌표
+                        map: map // 마커를 표시할 지도 객체
+                        });
+                    }
+                }
+            };
+            xhr.send('');
+
+</script>
+</body>
+</html>
