@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>화재 발생 빈도수 막대그래프</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+</head>
+<body>
+  <div class="container">
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <script>
+    var csvUrl = '소방청_화재발생 정보_20211231.csv';
+    var fireFrequency = {};
+    var data;
+
+    Papa.parse(csvUrl, {
+      download: true,
+      header: true,
+      complete: function(results) {
+        data = results.data;
+        createProvinceChart();
+      }
+    });
+
+    function createProvinceChart() {
+      fireFrequency = {};
+      data.forEach(function(row) {
+        var region = row['시도'];
+        if (!(region in fireFrequency)) {
+          fireFrequency[region] = 0;
+        }
+        fireFrequency[region]++;
+      });
+
+      createChart(Object.keys(fireFrequency), Object.values(fireFrequency), '시도별 화재 발생 빈도', function(event, array) {
+        if (array.length === 0) return;
+        var label = this.data.labels[array[0]._index];
+        createCityChart(label);
+      });
+    }
+
+    function createCityChart(province) {
+      fireFrequency = {};
+      data.forEach(function(row) {
+        if (row['시도'] !== province) return;
+        var city = row['시군구'];
+        if (!(city in fireFrequency)) {
+          fireFrequency[city] = 0;
+        }
+        fireFrequency[city]++;
+      });
+
+      createChart(Object.keys(fireFrequency), Object.values(fireFrequency), province + ' 화재 발생 빈도', function(event, array) {
+        if (array.length === 0) return;
+        var label = this.data.labels[array[0]._index];
+        createDetailChart(province, label);
+      });
+    }
+
+    // 상세 차트 생성
+    function createDetailChart(province, city) {
+      var detailData = data.filter(function(row) {
+        return row['시도'] === province && row['시군구'] === city;
+      });
+
+      var detailContainer = document.getElementById('detail');
+      detailContainer.innerHTML = '';
+
+      detailData.forEach(function(row) {
+        var p = document.createElement('p');
+        p.textContent = '발생일: ' + row['화재발생년월일'] + ', 피해액: ' + row['재산피해소계'] + '만원';
+        detailContainer.appendChild(p);
+      });
+    }
+    createProvinceChart();
+
+    function createChart(labels, dataset, label, callback) {
+      var ctx = document.getElementById('myChart');
+      if (window.myChart instanceof Chart) {
+        window.myChart.destroy();
+      }
+      window.myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: label,
+            data: dataset,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          },
+          onClick: callback
+        }
+      });
+    }
+  </script>
+<div class="container">
+  <canvas id="myChart"></canvas>
+</div>
+<div id="detail"></div>
+  
+</body>
+</html>
