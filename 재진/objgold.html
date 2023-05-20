@@ -14,12 +14,13 @@
         const url_fireinfo = 'https://api.odcloud.kr/api/15086458/v1/uddi:c34efea2-ff75-43c2-9203-d29d7f9c6708?page=1&perPage=100&serviceKey=0D0v2Q2hxIThZmHHWv0XEQN7P9uI%2BV4VY%2BcXg%2BpakTWFNEz9FuobOPSU4%2Fj%2FLUZrXRFcvWkSrc4fo%2B79pvi%2FWg%3D%3D';
 
         class FSMarker {
-            constructor(lat, lng, name) {
+            constructor(lat, lng, name, count = 0) {
                 this.lat = lat;
                 this.lng = lng;
                 this.name = name;
                 this.marker = null;
-                this.polyLine = null;
+                this.polyLine = [];
+                this.count = count;
             }
 
             createMarker(map) {
@@ -32,15 +33,15 @@
             }
 
             createPolyLine(falat, falng, map) {
-                this.polyLine = new PolyLine(
+                this.polyLine[this.count] = new PolyLine(
                     falat,
                     falng,
                     map,
-                    this
+                    this.count++
                 );
 
                 kakao.maps.event.addListener(this.marker, 'click', () => {
-                    this.polyLine.existLine();
+                    this.polyLine[this.count].existLine();
                 });
             }
 
@@ -172,11 +173,14 @@
                                     let arrivetime = String(fireinfo[i]["현장도착시각"]); //시각이 12:30으로 되어있으므로 : 분리를 해서 시간과 분으로 표시
                                     let calltime = String(fireinfo[i]["신고시각"]);
                                     const timediff = new timeDiff(arrivetime, calltime);
+
                                     if (arrivetime === 'null') { //도착시간이 null값인 경우 보라색으로 지정
                                         timediff.colordiff = 'purple';
                                     } 
+
                                     let content_fa_info = "소방서 : " + fireinfo[i]["출동소방서"] + "<br>신고시각 : " + fireinfo[i]["신고시각"] + "<br>출동시각 : " + fireinfo[i]["출동시각"] + "<br>도착시각 : " + fireinfo[i]["현장도착시각"];
                                     let fa_address = fireinfo[i]["긴급구조시"] + " " + fireinfo[i]["긴급구조구"] + " " + fireinfo[i]["긴급구조동"] + " " + fireinfo[i]["긴급구조리"];
+ 
                                     new kakao.maps.services.Geocoder().addressSearch(fa_address, function (result, status) {
                                         if (status === kakao.maps.services.Status.OK) {
                                             var lat = result[0].y;
