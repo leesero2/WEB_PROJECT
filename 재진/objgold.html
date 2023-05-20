@@ -13,6 +13,12 @@
     <script>
         const url_fireinfo = 'https://api.odcloud.kr/api/15086458/v1/uddi:c34efea2-ff75-43c2-9203-d29d7f9c6708?page=1&perPage=100&serviceKey=0D0v2Q2hxIThZmHHWv0XEQN7P9uI%2BV4VY%2BcXg%2BpakTWFNEz9FuobOPSU4%2Fj%2FLUZrXRFcvWkSrc4fo%2B79pvi%2FWg%3D%3D';
 
+        var fs_image_src = 'firestation.png';
+        var fs_image_size = new kakao.maps.Size(20, 20);
+        var fs_image_op = { offset: new kakao.maps.Point(10, 10) };
+
+        var fs_image = new kakao.maps.MarkerImage(fs_image_src, fs_image_size, fs_image_op);
+
         class FSMarker {
             constructor(lat, lng, name, count = 0) {
                 this.lat = lat;
@@ -26,7 +32,8 @@
             createMarker(map) {
                 this.marker = new kakao.maps.Marker({
                     position: new kakao.maps.LatLng(this.lat, this.lng),
-                    map: map
+                    map: map,
+                    image: fs_image
                 });
 
 
