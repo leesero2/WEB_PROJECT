@@ -1,32 +1,30 @@
 <!doctype html>
-<html lang="en" data-bs-theme="auto">
+<html lang="ko">
 
 <head>
-    <script src="/WEB_PROJECT/화섭/js/cheatsheet.js"></script>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.111.3">
-    <title>Cheatsheet · Bootstrap v5.3</title>
+    <meta name="author" content="Mark Otto, Jacob Thornton, 그리고 Bootstrap 기여자들">
+    <meta name="generator" content="Hugo 0.104.2">
+    <title>Cheatsheet · Bootstrap v5.2</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/cheatsheet/">
-
-
+    <link rel="canonical" href="https://getbootstrap.kr/docs/5.2/examples/cheatsheet/">
 
 
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <!-- Favicons -->
-    <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="manifest" href="/docs/5.3/assets/img/favicons/manifest.json">
-    <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
+    <link rel="apple-touch-icon" href="/docs/5.2/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/5.2/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/5.2/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
     <meta name="theme-color" content="#712cf9">
 
 
@@ -46,7 +44,6 @@
         }
 
         .b-example-divider {
-            width: 100%;
             height: 3rem;
             background-color: rgba(0, 0, 0, .1);
             border: solid rgba(0, 0, 0, .15);
@@ -83,242 +80,63 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        .btn-bd-primary {
-            --bd-violet-bg: #712cf9;
-            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-
-            --bs-btn-font-weight: 600;
-            --bs-btn-color: var(--bs-white);
-            --bs-btn-bg: var(--bd-violet-bg);
-            --bs-btn-border-color: var(--bd-violet-bg);
-            --bs-btn-hover-color: var(--bs-white);
-            --bs-btn-hover-bg: #6528e0;
-            --bs-btn-hover-border-color: #6528e0;
-            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-            --bs-btn-active-color: var(--bs-btn-hover-color);
-            --bs-btn-active-bg: #5a23c8;
-            --bs-btn-active-border-color: #5a23c8;
+        a {
+            text-decoration: none;
+            color: inherit;
         }
 
-        .bd-mode-toggle {
-            z-index: 1500;
+        .strong-text {
+        font-size: 20px;
+        text-align: center;
         }
+
     </style>
 
 
     <!-- Custom styles for this template -->
-    <link href="/WEB_PROJECT//css/cheatsheet.css" rel="stylesheet">
+    <link href="/bootstrap/webproject/css/cheatsheet.css" rel="stylesheet">
 </head>
 
-<body class="bg-body-tertiary">
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="check2" viewBox="0 0 16 16">
-            <path
-                d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-        </symbol>
-        <symbol id="circle-half" viewBox="0 0 16 16">
-            <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
-        </symbol>
-        <symbol id="moon-stars-fill" viewBox="0 0 16 16">
-            <path
-                d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
-            <path
-                d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z" />
-        </symbol>
-        <symbol id="sun-fill" viewBox="0 0 16 16">
-            <path
-                d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
-        </symbol>
-    </svg>
-
-    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
-        <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button"
-            aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
-            <svg class="bi my-1 theme-icon-active" width="1em" height="1em">
-                <use href="#circle-half"></use>
-            </svg>
-            <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
-            <li>
-                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light"
-                    aria-pressed="false">
-                    <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em">
-                        <use href="#sun-fill"></use>
-                    </svg>
-                    Light
-                    <svg class="bi ms-auto d-none" width="1em" height="1em">
-                        <use href="#check2"></use>
-                    </svg>
-                </button>
-            </li>
-            <li>
-                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark"
-                    aria-pressed="false">
-                    <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em">
-                        <use href="#moon-stars-fill"></use>
-                    </svg>
-                    Dark
-                    <svg class="bi ms-auto d-none" width="1em" height="1em">
-                        <use href="#check2"></use>
-                    </svg>
-                </button>
-            </li>
-            <li>
-                <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto"
-                    aria-pressed="true">
-                    <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em">
-                        <use href="#circle-half"></use>
-                    </svg>
-                    Auto
-                    <svg class="bi ms-auto d-none" width="1em" height="1em">
-                        <use href="#check2"></use>
-                    </svg>
-                </button>
-            </li>
-        </ul>
-    </div>
-
+<body class="bg-light">
 
     <header class="bd-header bg-dark py-3 d-flex align-items-stretch border-bottom border-dark">
         <div class="container-fluid d-flex align-items-center">
             <h1 class="d-flex align-items-center fs-4 text-white mb-0">
-                <img src="/docs/5.3/assets/brand/bootstrap-logo-white.svg" width="38" height="30" class="me-3"
+                <img src="/docs/5.2/assets/brand/bootstrap-logo-white.svg" width="38" height="30" class="me-3"
                     alt="Bootstrap">
-                화재 취약 지역 정보 서비스
+                <a href="/bootstrap/webproject/html/1.html" target="_self">화재 취약 정보 서비스</a>
             </h1>
+            <a href="/docs/5.2/examples/cheatsheet-rtl/" class="ms-auto link-light" hreflang="ar">RTL cheatsheet</a>
         </div>
     </header>
-    <aside class="bd-aside sticky-xl-top text-body-secondary align-self-start mb-3 mb-xl-5 px-2">
-        <h2 class="h6 pt-4 pb-3 mb-4 border-bottom">웹페이지 구성</h2>
+    <aside class="bd-aside sticky-xl-top text-muted align-self-start mb-3 mb-xl-5 px-2">
+        <h2 class="h6 pt-4 pb-3 mb-4 border-bottom">웹사이트 소개</h2>
         <nav class="small" id="toc">
             <ul class="list-unstyled">
+
                 <li class="my-2">
+                    <li><a href="/bootstrap/webproject/html/지역비교하기.html" target="_self"><strong class="strong-text">지역비교</strong><br></a></li>
                     <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse"
                         aria-expanded="false" data-bs-target="#contents-collapse"
                         aria-controls="contents-collapse">화재예방</button>
                     <ul class="list-unstyled ps-3 collapse" id="contents-collapse">
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#typography">Typography</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#images">Images</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#tables">Tables</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#figures">Figures</a></li>
+                        <li><a href="/bootstrap/webproject/html/소화기사용방법.html" target="_self">소화용품 사용 방법</a></li>
+                        <li><a href="/bootstrap/webproject/html/화재발생시행동요령.html" target="_self">화재 발생시 행동 요령</a></li>
+
                     </ul>
                 </li>
                 <li class="my-2">
                     <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse"
-                        aria-expanded="false" data-bs-target="#forms-collapse"
-                        aria-controls="forms-collapse">소화기 사용방법</button>
+                        aria-expanded="false" data-bs-target="#forms-collapse" aria-controls="forms-collapse">대처
+                        방법</button>
                     <ul class="list-unstyled ps-3 collapse" id="forms-collapse">
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#overview">Overview</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#disabled-forms">Disabled forms</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#sizing">Sizing</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#input-group">Input group</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#floating-labels">Floating labels</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#validation">Validation</a></li>
+                        <li>
+
+                            <a href="/bootstrap/webproject/html/건물종류별대처방법.html" target="_self">건물 종류 별 대처 방법</a></li>
+                        <li><a href="/bootstrap/webproject/html/건물구조별대처방법.html" target="_self">건물 구조 별 대처 방법</a></li>
                     </ul>
                 </li>
-                <li class="my-2">
-                    <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse"
-                        aria-expanded="false" data-bs-target="#components-collapse"
-                        aria-controls="components-collapse">화재 발생시 행동 요령</button>
-                    <ul class="list-unstyled ps-3 collapse" id="components-collapse">
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#accordion">Accordion</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#alerts">Alerts</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#badge">Badge</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#breadcrumb">Breadcrumb</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#buttons">Buttons</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#button-group">Button group</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#card">Card</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#carousel">Carousel</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#dropdowns">Dropdowns</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#list-group">List group</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#modal">Modal</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#navs">Navs</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#navbar">Navbar</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#pagination">Pagination</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#popovers">Popovers</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#progress">Progress</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#scrollspy">Scrollspy</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#spinners">Spinners</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#toasts">Toasts</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#tooltips">Tooltips</a></li>
-                    </ul>
-                </li>
-                
-                 <li class="my-2">
-                    <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse"
-                        aria-expanded="false" data-bs-target="#forms-collapse"
-                        aria-controls="forms-collapse">건물 종류 별 대처 방법</button>
-                    <ul class="list-unstyled ps-3 collapse" id="forms-collapse">
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#overview">Overview</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#disabled-forms">Disabled forms</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#sizing">Sizing</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#input-group">Input group</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#floating-labels">Floating labels</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#validation">Validation</a></li>
 
-                     </ul>
-
-                </li>
-
-                <li class="my-2">
-                    <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse"
-                        aria-expanded="false" data-bs-target="#forms-collapse"
-                        aria-controls="forms-collapse">건물 구조 별 대처 방법</button>
-                    <ul class="list-unstyled ps-3 collapse" id="forms-collapse">
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#overview">Overview</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#disabled-forms">Disabled forms</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#sizing">Sizing</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#input-group">Input group</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#floating-labels">Floating labels</a></li>
-                        <li><a class="d-inline-flex align-items-center rounded text-decoration-none"
-                                href="#validation">Validation</a></li>
-
-                     </ul>
-
-                </li>
-                
             </ul>
         </nav>
     </aside>
@@ -329,25 +147,20 @@
             <article class="my-3" id="typography">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Typography</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/content/typography/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/content/typography/">Documentation</a>
                 </div>
 
                 <div>
                     <div class="bd-example-snippet bd-code-snippet">
                         <div class="bd-example">
-                            <p class="display-1">지도 들어갈 위치</p>
+                            <p class="display-1">지도 위치</p>
                         </div>
                     </div>
 
 
                     <div class="bd-example-snippet bd-code-snippet">
                         <div class="bd-example">
-                            <p class="h1">Heading 1</p>
-                            <p class="h2">Heading 2</p>
-                            <p class="h3">Heading 3</p>
-                            <p class="h4">Heading 4</p>
-                            <p class="h5">Heading 5</p>
-                            <p class="h6">Heading 6</p>
+                            <p class="h1">차트 위치</p>
                         </div>
                     </div>
 
@@ -428,7 +241,7 @@
             <article class="my-3" id="images">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Images</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/content/images/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/content/images/">Documentation</a>
                 </div>
 
                 <div>
@@ -441,6 +254,7 @@
                                 <rect width="100%" height="100%" fill="#868e96" /><text x="50%" y="50%" fill="#dee2e6"
                                     dy=".3em">Responsive image</text>
                             </svg>
+
                         </div>
                     </div>
 
@@ -456,6 +270,7 @@
                                 <rect width="100%" height="100%" fill="#868e96" /><text x="50%" y="50%" fill="#dee2e6"
                                     dy=".3em">200x200</text>
                             </svg>
+
                         </div>
                     </div>
 
@@ -464,7 +279,7 @@
             <article class="my-3" id="tables">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Tables</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/content/tables/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/content/tables/">Documentation</a>
                 </div>
 
                 <div>
@@ -640,7 +455,7 @@
             <article class="my-3" id="figures">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Figures</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/content/figures/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/content/figures/">Documentation</a>
                 </div>
 
                 <div>
@@ -654,6 +469,7 @@
                                     <rect width="100%" height="100%" fill="#868e96" /><text x="50%" y="50%"
                                         fill="#dee2e6" dy=".3em">400x300</text>
                                 </svg>
+
                                 <figcaption class="figure-caption">A caption for the above image.</figcaption>
                             </figure>
                         </div>
@@ -669,7 +485,7 @@
             <article class="my-3" id="overview">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Overview</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/forms/overview/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/forms/overview/">Documentation</a>
                 </div>
 
                 <div>
@@ -736,7 +552,7 @@
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Disabled forms</h3>
                     <a class="d-flex align-items-center"
-                        href="/docs/5.3/forms/overview/#disabled-forms">Documentation</a>
+                        href="/docs/5.2/forms/overview/#disabled-forms">Documentation</a>
                 </div>
 
                 <div>
@@ -803,7 +619,7 @@
             <article class="my-3" id="sizing">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Sizing</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/forms/form-control/#sizing">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/forms/form-control/#sizing">Documentation</a>
                 </div>
 
                 <div>
@@ -855,7 +671,7 @@
             <article class="my-3" id="input-group">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Input group</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/forms/input-group/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/forms/input-group/">Documentation</a>
                 </div>
 
                 <div>
@@ -893,7 +709,7 @@
             <article class="my-3" id="floating-labels">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Floating labels</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/forms/floating-labels/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/forms/floating-labels/">Documentation</a>
                 </div>
 
                 <div>
@@ -919,7 +735,7 @@
             <article class="my-3" id="validation">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Validation</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/forms/validation/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/forms/validation/">Documentation</a>
                 </div>
 
                 <div>
@@ -1006,7 +822,7 @@
             <article class="my-3" id="accordion">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Accordion</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/accordion/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/accordion/">Documentation</a>
                 </div>
 
                 <div>
@@ -1014,7 +830,7 @@
                         <div class="bd-example">
                             <div class="accordion" id="accordionExample">
                                 <div class="accordion-item">
-                                    <h4 class="accordion-header">
+                                    <h4 class="accordion-header" id="headingOne">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#collapseOne" aria-expanded="true"
                                             aria-controls="collapseOne">
@@ -1022,7 +838,7 @@
                                         </button>
                                     </h4>
                                     <div id="collapseOne" class="accordion-collapse collapse show"
-                                        data-bs-parent="#accordionExample">
+                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
                                             <strong>This is the first item's accordion body.</strong> It is hidden by
                                             default, until the collapse plugin adds the appropriate classes that we use
@@ -1035,7 +851,7 @@
                                     </div>
                                 </div>
                                 <div class="accordion-item">
-                                    <h4 class="accordion-header">
+                                    <h4 class="accordion-header" id="headingTwo">
                                         <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                                             aria-expanded="false" aria-controls="collapseTwo">
@@ -1043,7 +859,7 @@
                                         </button>
                                     </h4>
                                     <div id="collapseTwo" class="accordion-collapse collapse"
-                                        data-bs-parent="#accordionExample">
+                                        aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
                                             <strong>This is the second item's accordion body.</strong> It is hidden by
                                             default, until the collapse plugin adds the appropriate classes that we use
@@ -1056,7 +872,7 @@
                                     </div>
                                 </div>
                                 <div class="accordion-item">
-                                    <h4 class="accordion-header">
+                                    <h4 class="accordion-header" id="headingThree">
                                         <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapseThree"
                                             aria-expanded="false" aria-controls="collapseThree">
@@ -1064,7 +880,7 @@
                                         </button>
                                     </h4>
                                     <div id="collapseThree" class="accordion-collapse collapse"
-                                        data-bs-parent="#accordionExample">
+                                        aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
                                             <strong>This is the third item's accordion body.</strong> It is hidden by
                                             default, until the collapse plugin adds the appropriate classes that we use
@@ -1085,7 +901,7 @@
             <article class="my-3" id="alerts">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Alerts</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/alerts/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/alerts/">Documentation</a>
                 </div>
 
                 <div>
@@ -1163,7 +979,7 @@
             <article class="my-3" id="badge">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Badge</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/badge/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/badge/">Documentation</a>
                 </div>
 
                 <div>
@@ -1200,7 +1016,7 @@
             <article class="my-3" id="breadcrumb">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Breadcrumb</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/breadcrumb/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/breadcrumb/">Documentation</a>
                 </div>
 
                 <div>
@@ -1221,7 +1037,7 @@
             <article class="my-3" id="buttons">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Buttons</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/buttons/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/buttons/">Documentation</a>
                 </div>
 
                 <div>
@@ -1270,7 +1086,7 @@
             <article class="my-3" id="button-group">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Button group</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/button-group/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/button-group/">Documentation</a>
                 </div>
 
                 <div>
@@ -1300,7 +1116,7 @@
             <article class="my-3" id="card">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Card</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/card/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/card/">Documentation</a>
                 </div>
 
                 <div>
@@ -1317,6 +1133,7 @@
                                             <rect width="100%" height="100%" fill="#868e96" /><text x="50%" y="50%"
                                                 fill="#dee2e6" dy=".3em">Image cap</text>
                                         </svg>
+
                                         <div class="card-body">
                                             <h5 class="card-title">Card title</h5>
                                             <p class="card-text">Some quick example text to build on the card title and
@@ -1336,7 +1153,7 @@
                                                 make up the bulk of the card's content.</p>
                                             <a href="#" class="btn btn-primary">Go somewhere</a>
                                         </div>
-                                        <div class="card-footer text-body-secondary">
+                                        <div class="card-footer text-muted">
                                             2 days ago
                                         </div>
                                     </div>
@@ -1371,6 +1188,7 @@
                                                     <rect width="100%" height="100%" fill="#868e96" /><text x="50%"
                                                         y="50%" fill="#dee2e6" dy=".3em">Image</text>
                                                 </svg>
+
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body">
@@ -1378,8 +1196,8 @@
                                                     <p class="card-text">This is a wider card with supporting text below
                                                         as a natural lead-in to additional content. This content is a
                                                         little bit longer.</p>
-                                                    <p class="card-text"><small class="text-body-secondary">Last updated
-                                                            3 mins ago</small></p>
+                                                    <p class="card-text"><small class="text-muted">Last updated 3 mins
+                                                            ago</small></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -1394,7 +1212,7 @@
             <article class="my-3" id="carousel">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Carousel</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/carousel/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/carousel/">Documentation</a>
                 </div>
 
                 <div>
@@ -1419,6 +1237,7 @@
                                             <rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%"
                                                 fill="#555" dy=".3em">First slide</text>
                                         </svg>
+
                                         <div class="carousel-caption d-none d-md-block">
                                             <h5>First slide label</h5>
                                             <p>Some representative placeholder content for the first slide.</p>
@@ -1433,6 +1252,7 @@
                                             <rect width="100%" height="100%" fill="#666" /><text x="50%" y="50%"
                                                 fill="#444" dy=".3em">Second slide</text>
                                         </svg>
+
                                         <div class="carousel-caption d-none d-md-block">
                                             <h5>Second slide label</h5>
                                             <p>Some representative placeholder content for the second slide.</p>
@@ -1447,6 +1267,7 @@
                                             <rect width="100%" height="100%" fill="#555" /><text x="50%" y="50%"
                                                 fill="#333" dy=".3em">Third slide</text>
                                         </svg>
+
                                         <div class="carousel-caption d-none d-md-block">
                                             <h5>Third slide label</h5>
                                             <p>Some representative placeholder content for the third slide.</p>
@@ -1472,7 +1293,7 @@
             <article class="my-3" id="dropdowns">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Dropdowns</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/dropdowns/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/dropdowns/">Documentation</a>
                 </div>
 
                 <div>
@@ -1707,7 +1528,7 @@
             <article class="my-3" id="list-group">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>List group</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/list-group/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/list-group/">Documentation</a>
                 </div>
 
                 <div>
@@ -1768,7 +1589,7 @@
             <article class="my-3" id="modal">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Modal</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/modal/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/modal/">Documentation</a>
                 </div>
 
                 <div>
@@ -1800,7 +1621,7 @@
             <article class="my-3" id="navs">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Navs</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/navs-tabs/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/navs-tabs/">Documentation</a>
                 </div>
 
                 <div>
@@ -1838,7 +1659,8 @@
                                         content. Clicking another tab will toggle the visibility of this one for the
                                         next. The tab JavaScript swaps classes to control the content visibility and
                                         styling. You can use it with tabs, pills, and any other
-                                        <code>.nav</code>-powered navigation.</p>
+                                        <code>.nav</code>-powered navigation.
+                                    </p>
                                 </div>
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel"
                                     aria-labelledby="nav-profile-tab">
@@ -1846,7 +1668,8 @@
                                         content. Clicking another tab will toggle the visibility of this one for the
                                         next. The tab JavaScript swaps classes to control the content visibility and
                                         styling. You can use it with tabs, pills, and any other
-                                        <code>.nav</code>-powered navigation.</p>
+                                        <code>.nav</code>-powered navigation.
+                                    </p>
                                 </div>
                                 <div class="tab-pane fade" id="nav-contact" role="tabpanel"
                                     aria-labelledby="nav-contact-tab">
@@ -1854,7 +1677,8 @@
                                         content. Clicking another tab will toggle the visibility of this one for the
                                         next. The tab JavaScript swaps classes to control the content visibility and
                                         styling. You can use it with tabs, pills, and any other
-                                        <code>.nav</code>-powered navigation.</p>
+                                        <code>.nav</code>-powered navigation.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -1885,16 +1709,16 @@
             <article class="my-3" id="navbar">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Navbar</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/navbar/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/navbar/">Documentation</a>
                 </div>
 
                 <div>
                     <div class="bd-example-snippet bd-code-snippet">
                         <div class="bd-example">
-                            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                            <nav class="navbar navbar-expand-lg bg-light">
                                 <div class="container-fluid">
                                     <a class="navbar-brand" href="#">
-                                        <img src="/docs/5.3/assets/brand/bootstrap-logo-white.svg" width="38"
+                                        <img src="/docs/5.2/assets/brand/bootstrap-logo-white.svg" width="38"
                                             height="30" class="d-inline-block align-top" alt="Bootstrap" loading="lazy"
                                             style="filter: invert(1) grayscale(100%) brightness(200%);">
                                     </a>
@@ -1941,7 +1765,7 @@
                             <nav class="navbar navbar-expand-lg navbar-dark bg-primary mt-5">
                                 <div class="container-fluid">
                                     <a class="navbar-brand" href="#">
-                                        <img src="/docs/5.3/assets/brand/bootstrap-logo-white.svg" width="38"
+                                        <img src="/docs/5.2/assets/brand/bootstrap-logo-white.svg" width="38"
                                             height="30" class="d-inline-block align-top" alt="Bootstrap" loading="lazy">
                                     </a>
                                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -1992,7 +1816,7 @@
             <article class="my-3" id="pagination">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Pagination</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/pagination/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/pagination/">Documentation</a>
                 </div>
 
                 <div>
@@ -2059,7 +1883,7 @@
             <article class="my-3" id="popovers">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Popovers</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/popovers/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/popovers/">Documentation</a>
                 </div>
 
                 <div>
@@ -2103,31 +1927,35 @@
             <article class="my-3" id="progress">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Progress</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/progress/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/progress/">Documentation</a>
                 </div>
 
                 <div>
                     <div class="bd-example-snippet bd-code-snippet">
                         <div class="bd-example">
-                            <div class="progress mb-3" role="progressbar" aria-label="Example with label"
-                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar">0%</div>
+                            <div class="progress mb-3">
+                                <div class="progress-bar" role="progressbar" aria-label="Example with label"
+                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                             </div>
-                            <div class="progress mb-3" role="progressbar" aria-label="Success example with label"
-                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-success w-25">25%</div>
+                            <div class="progress mb-3">
+                                <div class="progress-bar bg-success w-25" role="progressbar"
+                                    aria-label="Success example with label" aria-valuenow="25" aria-valuemin="0"
+                                    aria-valuemax="100">25%</div>
                             </div>
-                            <div class="progress mb-3" role="progressbar" aria-label="Info example with label"
-                                aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar text-bg-info w-50">50%</div>
+                            <div class="progress mb-3">
+                                <div class="progress-bar text-bg-info w-50" role="progressbar"
+                                    aria-label="Info example with label" aria-valuenow="50" aria-valuemin="0"
+                                    aria-valuemax="100">50%</div>
                             </div>
-                            <div class="progress mb-3" role="progressbar" aria-label="Warning example with label"
-                                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar text-bg-warning w-75">75%</div>
+                            <div class="progress mb-3">
+                                <div class="progress-bar text-bg-warning w-75" role="progressbar"
+                                    aria-label="Warning example with label" aria-valuenow="75" aria-valuemin="0"
+                                    aria-valuemax="100">75%</div>
                             </div>
-                            <div class="progress" role="progressbar" aria-label="Danger example with label"
-                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-danger w-100">100%</div>
+                            <div class="progress">
+                                <div class="progress-bar bg-danger w-100" role="progressbar"
+                                    aria-label="Danger example with label" aria-valuenow="100" aria-valuemin="0"
+                                    aria-valuemax="100">100%</div>
                             </div>
                         </div>
                     </div>
@@ -2135,17 +1963,12 @@
 
                     <div class="bd-example-snippet bd-code-snippet">
                         <div class="bd-example">
-                            <div class="progress-stacked">
-                                <div class="progress" role="progressbar" aria-label="Segment one - default example"
-                                    style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar"></div>
-                                </div>
-                                <div class="progress" role="progressbar"
-                                    aria-label="Segment two - animated striped success example" style="width: 40%"
-                                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success">
-                                    </div>
-                                </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-label="Segment one - default example"
+                                    style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                    role="progressbar" aria-label="Segment two - animated striped success example"
+                                    style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
                     </div>
@@ -2155,12 +1978,12 @@
             <article class="my-3" id="scrollspy">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Scrollspy</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/scrollspy/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/scrollspy/">Documentation</a>
                 </div>
 
                 <div>
                     <div class="bd-example">
-                        <nav id="navbar-example2" class="navbar bg-body-tertiary px-3">
+                        <nav id="navbar-example2" class="navbar bg-light px-3">
                             <a class="navbar-brand" href="#">Navbar</a>
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
@@ -2217,7 +2040,7 @@
             <article class="my-3" id="spinners">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Spinners</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/spinners/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/spinners/">Documentation</a>
                 </div>
 
                 <div>
@@ -2287,7 +2110,7 @@
             <article class="my-3" id="toasts">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Toasts</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/toasts/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/toasts/">Documentation</a>
                 </div>
 
                 <div>
@@ -2300,8 +2123,9 @@
                                         preserveAspectRatio="xMidYMid slice" focusable="false">
                                         <rect width="100%" height="100%" fill="#007aff" />
                                     </svg>
+
                                     <strong class="me-auto">Bootstrap</strong>
-                                    <small class="text-body-secondary">11 mins ago</small>
+                                    <small class="text-muted">11 mins ago</small>
                                     <button type="button" class="btn-close" data-bs-dismiss="toast"
                                         aria-label="Close"></button>
                                 </div>
@@ -2317,7 +2141,7 @@
             <article class="mt-3 mb-5 pb-5" id="tooltips">
                 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
                     <h3>Tooltips</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.3/components/tooltips/">Documentation</a>
+                    <a class="d-flex align-items-center" href="/docs/5.2/components/tooltips/">Documentation</a>
                 </div>
 
                 <div>
@@ -2419,15 +2243,11 @@
     </div>
 
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
 
-        <script src="/WEB_PROJECT/화섭/js/cheatsheet.js"></script>
-
+    <script src="/bootstrap/webproject/js/cheatsheet.js"></script>
 </body>
 
 </html>
