@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=561fe3731d7acee298fe5b22b5fac01c&libraries=services"></script>
+</head>
+
+<body>
+    <div id="map" style="width: 100%; height: 1000px"></div>
+    <script>
+        const url_fireinfo = 'https://api.odcloud.kr/api/15086458/v1/uddi:c34efea2-ff75-43c2-9203-d29d7f9c6708?page=1&perPage=375&serviceKey=0D0v2Q2hxIThZmHHWv0XEQN7P9uI%2BV4VY%2BcXg%2BpakTWFNEz9FuobOPSU4%2Fj%2FLUZrXRFcvWkSrc4fo%2B79pvi%2FWg%3D%3D';
+        const url_firestation = 'https://api.odcloud.kr/api/15048243/v1/uddi:818f12a7-70c1-4aff-81a0-80d5db5be9fb?page=1&perPage=375&serviceKey=0D0v2Q2hxIThZmHHWv0XEQN7P9uI%2BV4VY%2BcXg%2BpakTWFNEz9FuobOPSU4%2Fj%2FLUZrXRFcvWkSrc4fo%2B79pvi%2FWg%3D%3D';
+        const url_119station = 'https://api.odcloud.kr/api/15065056/v1/uddi:26c81fc7-9e59-4868-883f-965570d4cc38?page=1&perPage=375&serviceKey=0D0v2Q2hxIThZmHHWv0XEQN7P9uI%2BV4VY%2BcXg%2BpakTWFNEz9FuobOPSU4%2Fj%2FLUZrXRFcvWkSrc4fo%2B79pvi%2FWg%3D%3D';
+
+     
+        var mapContainer = document.getElementById("map"); // 지도를 표시할 div
+        var mapOption = {
+            center: new kakao.maps.LatLng(37.566535, 126.9779692), // 지도의 중심좌표
+            level: 7, // 지도의 확대 레벨
+            mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
+        };
+
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        var fs_image_src = 'firestation.png';
+        var fs_image_size = new kakao.maps.Size(20, 20);
+        var fs_image_op = { offset: new kakao.maps.Point(10, 10) };
+
+        fetch(url_fireinfo)
+            .then((res) => res.json())
+            .then((resJson) => {
+                //화재현장 관련 데이터 접근 변수
+                var fireinfo = resJson.data;
+
+                fetch(url_firestation)
+                    .then((res) => res.json())
+                    .then((resJson) => {
+                        //소방서 관련 데이터 접근 변수
+                        var firestation = resJson.data;
+
+                        fetch(url_119station)
+                            .then((res) => res.json())
+                            .then((resJson) => {
+                                //119 안전센터 관련 데이터 접근 변수
+                                var fire119 = resJson.data;
+
+                                var fs_image = new kakao.maps.MarkerImage(fs_image_src, fs_image_size, fs_image_op); //소방서 이미지 만들기
+
+                                for (var i = 0; i < fireinfo.length; i++) { //화재구역 원 생성하기
+                                    let arrivetime = String(fireinfo[i]["현장도착시각"]); //시각이 12:30으로 되어있으므로 : 분리를 해서 시간과 분으로 표시
+
+                                    let colordiff = 'black';
+
+                                    if (arrivetime === 'null') { //도착시간이 null값인 경우 보라색으로 지정
+                                        colordiff = 'purple';
+                                    } else {
+                                        let atimeParts = arrivetime.split(":");
+                                        let ahours = parseInt(atimeParts[0]); // 시간
+                                        let aminutes = parseInt(atimeParts[1]); // 분
+
+                                        let calltime = String(fireinfo[i]["신고시각"]);
+                                        let ctimeParts = calltime.split(":");
+                                        let chours = parseInt(ctimeParts[0]); // 시간
+                                        let cminutes = parseInt(ctimeParts[1]); // 분
+
+                                        let atotal = ahours * 60 + aminutes; //a시간:분을 분으로 전환
+                                        let ctotal = chours * 60 + cminutes; //c시간:분을 분으로 전환
+                                        let timediff = atotal - ctotal; //골든타임은 분 단위이므로 분단위로 계산 후 저장
+
+                                        if (timediff <= 7) {
+                                            colordiff = 'green';
+                                        } else {
+                                            colordiff = 'red';
+                                        }
+                                    }
+                                    let content_fa_info = "소방서 : " + fireinfo[i]["출동소방서"] + "<br>신고시각 : " + fireinfo[i]["신고시각"] + "<br>출동시각 : " + fireinfo[i]["출동시각"] + "<br>도착시각 : " + fireinfo[i]["현장도착시각"];
+
+                                    let fa_address = fireinfo[i]["긴급구조시"] + " " + fireinfo[i]["긴급구조구"] + " " + fireinfo[i]["긴급구조동"] + " " + fireinfo[i]["긴급구조리"];
+                                    new kakao.maps.services.Geocoder().addressSearch(fa_address, function (result, status) {
+                                        if (status === kakao.maps.services.Status.OK) {
+                                            var lat = result[0].y;
+                                            var lng = result[0].x;
+                                        }
+                                        var circle = new kakao.maps.Circle({ //원 생성하기
+                                            map: map,
+                                            center: new kakao.maps.LatLng(lat, lng),
+                                            radius: 500,
+                                            strokeWeight: 3,
+                                            strokeColor: colordiff,
+                                            strokeOpacity: 1,
+                                            strokeStyle: 'solid',
+                                            fillColor: colordiff,
+                                            fillOpacity: 0.5
+                                        });
+
+                                        var iwPosition = new kakao.maps.LatLng(lat, lng); //인포윈도우 표시 위치입니다
+                                        let infowindow = new kakao.maps.InfoWindow({
+                                            position: iwPosition,
+                                            content: content_fa_info
+                                        });
+
+                                        kakao.maps.event.addListener(circle, 'click', function () {
+                                            var iwPosition = circle.getPosition();
+                                            infowindow.setContent(content_fa_info);
+
+                                            var marker = new kakao.maps.Marker({
+                                                position: iwPosition,
+                                                map: null // 마커를 생성하지만 지도에 표시하지 않습니다.
+                                            });
+
+                                            if (infowindow.getMap()) {
+                                                infowindow.close();
+                                            } else {
+                                                infowindow.open(map, marker);
+                                            }
+                                        });
+
+
+                                    });
+                                }
+                                var polyline = [];
+
+                                for (var i = 0; i < firestation.length; i++) {
+                                    let fs_address = firestation[i]["주소"]; //소방서 주소
+                                    let fs_name = firestation[i]["소방서"]; //소방서 이름
+                                    let fs119_ad = fire119[i]["주소"];
+                                    let fs119_name = fire119[i]["119안전센터명"];
+
+                                    new kakao.maps.services.Geocoder().addressSearch(fs119_ad, function (result, status) {
+
+                                        if (status == kakao.maps.services.Status.OK) {
+                                            var lat = result[0].y;
+                                            var lng = result[0].x;
+                                        }
+                                        //이미지 마커 만들기
+                                        var fs_marker = new kakao.maps.Marker({
+                                            position: new kakao.maps.LatLng(lat, lng),
+                                            image: fs_image,
+                                            map: map
+                                        })
+                                        // //119 안전센터 이름 표시
+                                        // new kakao.maps.CustomOverlay({
+                                        //     position: new kakao.maps.LatLng(lat, lng),
+                                        //     content: fs119_name,
+                                        //     map: map
+                                        // });
+
+                                        kakao.maps.event.addListener(fs_marker, 'click', function () {
+                                            for (var j = 0; j < fire119.length; j++) {
+                                                let fs_nameinfo = fireinfo[j]["출동안전센터_지역대"];
+                                                let fa_address = fireinfo[j]["긴급구조시"] + " " + fireinfo[j]["긴급구조구"] + " " + fireinfo[j]["긴급구조동"] + " " + fireinfo[j]["긴급구조리"];
+
+                                                new kakao.maps.services.Places().keywordSearch(fs_nameinfo, function (result, status) {
+
+                                                    if (status == kakao.maps.services.Status.OK) {
+                                                        var lat119 = result[0].y;
+                                                        var lng119 = result[0].x;
+                                                    }
+                                                });
+
+                                                if (lat == lat119 && lng == lng119) {
+                                                    let arrivetime = String(fireinfo[j]["현장도착시각"]); //시각이 12:30으로 되어있으므로 : 분리를 해서 시간과 분으로 표시
+                                                    let timediff = 0;
+
+                                                    if (arrivetime === 'null') { //도착시간이 null값인 경우 보라색으로 지정
+                                                        timediff = 0;
+                                                    }
+                                                    else {
+                                                        let atimeParts = arrivetime.split(":");
+                                                        let ahours = parseInt(atimeParts[0]); // 시간
+                                                        let aminutes = parseInt(atimeParts[1]); // 분
+
+                                                        let calltime = String(fireinfo[j]["신고시각"]);
+                                                        let ctimeParts = calltime.split(":");
+                                                        let chours = parseInt(ctimeParts[0]); // 시간
+                                                        let cminutes = parseInt(ctimeParts[1]); // 분
+
+                                                        let atotal = ahours * 60 + aminutes; //a시간:분을 분으로 전환
+                                                        let ctotal = chours * 60 + cminutes; //c시간:분을 분으로 전환
+                                                        timediff = atotal - ctotal; //골든타임은 분 단위이므로 분단위로 계산 후 저장
+                                                    }
+
+                                                    if (timediff > 7) {
+                                                        new kakao.maps.services.Geocoder().addressSearch(fa_address, function (result, status) {
+
+                                                            if (status === kakao.maps.services.Status.OK) {
+                                                                var falat = result[0].y;
+                                                                var falng = result[0].x;
+                                                            }
+                                                            //선 생성
+                                                            var linePath = [ //119 안전센터의 좌표와 원의 좌표를 받는다
+                                                                new kakao.maps.LatLng(lat, lng),
+                                                                new kakao.maps.LatLng(falat, falng)
+                                                            ];
+
+                                                            if (!polyline[j]) {
+                                                                // 지도에 표시할 선을 생성합니다
+                                                                polyline[j] = new kakao.maps.Polyline({
+                                                                    path: linePath, // 선을 구성하는 좌표배열 입니다
+                                                                    strokeWeight: 5, // 선의 두께 입니다
+                                                                    strokeColor: 'blue', // 선의 색깔입니다
+                                                                    strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                                                                    strokeStyle: 'solid' // 선의 스타일입니다
+                                                                });
+
+                                                                // 지도에 선을 표시합니다 
+                                                                polyline[j].setMap(map);
+                                                                polyline[j] = 0;
+                                                            }
+                                                            else {
+                                                                polyline[j].setMap(null);
+                                                                polyline[j] = 1;
+                                                            }
+
+
+                                                        });
+                                                    }
+
+                                                }
+                                            }
+                                        });
+
+                                    });
+                                    new kakao.maps.services.Geocoder().addressSearch(fs_address, function (result, status) {
+                                        //소방서 주소 좌표
+                                        if (status === kakao.maps.services.Status.OK) {
+                                            var lat = result[0].y;
+                                            var lng = result[0].x;
+                                        }
+                                        //이미지 마커 만들기
+                                        var fs_marker = new kakao.maps.Marker({
+                                            position: new kakao.maps.LatLng(lat, lng),
+                                            image: fs_image,
+                                            map: map
+                                        })
+                                        // //소방서 이름 표시
+                                        // new kakao.maps.CustomOverlay({
+                                        //     position: new kakao.maps.LatLng(lat, lng),
+                                        //     content: '<div>' + fs_name + '</div>',
+                                        //     map: map
+                                        // });
+                                        let polyline = null;
+                                        kakao.maps.event.addListener(fs_marker, 'click', function () {
+
+                                            for (var j = 0; j < fire119.length; j++) {
+                                                let fs_nameinfo = fireinfo[j]["출동소방서"];
+                                                let fa_address = fireinfo[j]["긴급구조시"] + " " + fireinfo[j]["긴급구조구"] + " " + fireinfo[j]["긴급구조동"] + " " + fireinfo[j]["긴급구조리"];
+                                                if (fs_name == fs_nameinfo) {
+                                                    let arrivetime = String(fireinfo[j]["현장도착시각"]); //시각이 12:30으로 되어있으므로 : 분리를 해서 시간과 분으로 표시
+                                                    let timediff = 0;
+
+                                                    if (arrivetime === 'null') { //도착시간이 null값인 경우 보라색으로 지정
+                                                        timediff = 0;
+                                                    }
+                                                    else {
+                                                        let atimeParts = arrivetime.split(":");
+                                                        let ahours = parseInt(atimeParts[0]); // 시간
+                                                        let aminutes = parseInt(atimeParts[1]); // 분
+
+                                                        let calltime = String(fireinfo[j]["신고시각"]);
+                                                        let ctimeParts = calltime.split(":");
+                                                        let chours = parseInt(ctimeParts[0]); // 시간
+                                                        let cminutes = parseInt(ctimeParts[1]); // 분
+
+                                                        let atotal = ahours * 60 + aminutes; //a시간:분을 분으로 전환
+                                                        let ctotal = chours * 60 + cminutes; //c시간:분을 분으로 전환
+                                                        timediff = atotal - ctotal; //골든타임은 분 단위이므로 분단위로 계산 후 저장
+                                                    }
+
+                                                    if (timediff > 7) {
+                                                        if (!polyline) {
+                                                            new kakao.maps.services.Geocoder().addressSearch(fa_address, function (result, status) {
+
+                                                                if (status === kakao.maps.services.Status.OK) {
+                                                                    var falat = result[0].y;
+                                                                    var falng = result[0].x;
+                                                                }
+                                                                //선 생성
+                                                                var linePath = [ //소방서의 좌표와 원의 좌표를 받는다
+                                                                    new kakao.maps.LatLng(lat, lng),
+                                                                    new kakao.maps.LatLng(falat, falng)
+                                                                ];
+
+                                                                // 지도에 표시할 선을 생성합니다
+                                                                polyline = new kakao.maps.Polyline({
+                                                                    path: linePath, // 선을 구성하는 좌표배열 입니다
+                                                                    strokeWeight: 5, // 선의 두께 입니다
+                                                                    strokeColor: 'blue', // 선의 색깔입니다
+                                                                    strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                                                                    strokeStyle: 'solid' // 선의 스타일입니다
+                                                                });
+
+                                                                polyline.setMap(map);
+
+                                                            });
+                                                        }
+                                                        else {
+                                                            polyline.setMap(null);
+                                                            polyline = null;
+                                                        }
+
+                                                    }
+
+                                                }
+                                            }
+                                        });
+
+                                    });
+                                }
+                            });
+                    });
+            });
+
+    </script>
+</body>
+
+</html>
