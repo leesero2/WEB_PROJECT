@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <title>골든타임</title>
-    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=40a029937635d9f2ecb78a8e664736c9&libraries=services"></script>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c5399006405c2e57b967f4927e409e76&libraries=services"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 
 <body>
     <div id="map" style="width: 100%; height: 1000px"></div>
     <script>
-        const url_fireinfo = 'https://api.odcloud.kr/api/15086458/v1/uddi:c34efea2-ff75-43c2-9203-d29d7f9c6708?page=1&perPage=100&serviceKey=0D0v2Q2hxIThZmHHWv0XEQN7P9uI%2BV4VY%2BcXg%2BpakTWFNEz9FuobOPSU4%2Fj%2FLUZrXRFcvWkSrc4fo%2B79pvi%2FWg%3D%3D';
+        const url_fireinfo = 'https://api.odcloud.kr/api/15086458/v1/uddi:c34efea2-ff75-43c2-9203-d29d7f9c6708?page=1&perPage=200&serviceKey=0D0v2Q2hxIThZmHHWv0XEQN7P9uI%2BV4VY%2BcXg%2BpakTWFNEz9FuobOPSU4%2Fj%2FLUZrXRFcvWkSrc4fo%2B79pvi%2FWg%3D%3D';
 
+        //소방서, 센터 마커를 이미지 마커로 변경
         var fs_image_src = 'firestation.png';
         var fs_image_size = new kakao.maps.Size(20, 20);
         var fs_image_op = { offset: new kakao.maps.Point(10, 10) };
@@ -20,76 +21,44 @@
         var fs_image = new kakao.maps.MarkerImage(fs_image_src, fs_image_size, fs_image_op);
 
         class FSMarker {
-            constructor(lat, lng, name, count = 0) {
+            constructor(lat, lng, name) {
                 this.lat = lat;
                 this.lng = lng;
                 this.name = name;
                 this.marker = null;
-                this.polyLine = [];
-                this.count = count;
+                this.polyline = null;
+                this.count = 0;
             }
 
             createMarker(map) {
                 this.marker = new kakao.maps.Marker({
                     position: new kakao.maps.LatLng(this.lat, this.lng),
-                    map: map,
-                    image: fs_image
-                });
-
-
-            }
-
-            createPolyLine(falat, falng, map) {
-                var current = this.count
-                this.polyLine[current] = new PolyLine(
-                    falat,
-                    falng,
-                    map,
-                );
-                this.count++;
-                kakao.maps.event.addListener(this.marker, 'click', () => {
-                    this.polyLine[current].existLine();
+                    map: map
                 });
             }
 
-
-        }
-
-        class PolyLine {
-            constructor(falat, falng, map, fsMarker, exist = false) {
-                this.lat = falat;
-                this.lng = falng;
-                this.linePath = [
-                    new kakao.maps.LatLng(falat, falng),
-                    new kakao.maps.LatLng(fsMarker.lat, fsMarker.lng)
-                ];
-                this.map = map;
-                this.fsMarker = fsMarker;
-                this.exist = exist;
-                this.polyLine = null;
-
-                this.createLine();
-            }
-
-            createLine() {
-                this.polyLine = new kakao.maps.Polyline({
-                    path: this.linePath,
-                    strokeWeight: 5,
-                    strokeColor: 'blue',
-                    strokeOpacity: 0.7,
-                    strokeStyle: 'solid'
+            createPolyLine(path) {
+                this.polyline = new kakao.maps.Polyline({
+                    path: path, // 선을 구성하는 좌표배열 입니다
+                    strokeWeight: 5, // 선의 두께 입니다
+                    strokeColor: 'blue', // 선의 색깔입니다
+                    strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                    strokeStyle: 'solid' // 선의 스타일입니다
                 });
             }
 
-            existLine() {
-                if (!(this.exist)) {
-                    this.polyLine.setMap(this.map)
-                    this.exist = true;
-                } else {
-                    this.polyLine.setMap(null);
-                    this.exist = false;
-                }
+            existline(map) {
+                const polyline = this.polyline;
+
+                kakao.maps.event.addListener(this.marker, 'click', function () {
+                    if (polyline.getMap()) {
+                        polyline.setMap(null);
+                    } else {
+                        polyline.setMap(map);
+                    }
+                });
             }
+
         }
 
         class timeDiff {
@@ -110,12 +79,12 @@
                 var atotal = ahours * 60 + aminutes; //a시간:분을 분으로 전환
                 var ctotal = chours * 60 + cminutes; //c시간:분을 분으로 전환
                 var timediff = atotal - ctotal; //골든타임은 분 단위이므로 분단위로 계산 후 저장
-                
+
                 return timediff;
             }
 
             todiffcolor() {
-                if(this.timediff <= 7) {
+                if (this.timediff <= 7) {
                     return 'green';
                 }
                 else {
@@ -163,31 +132,31 @@
                                     fs_address[i] = rowfs[3];
                                 }
 
-                                for (var i = 0; i < 300; i++) { //119안전센터 배열 초기화
+                                for (var i = 0; i < 200; i++) { //119안전센터 배열 초기화
                                     var row119 = fs119[i].split(',');
                                     fs119_name[i] = row119[3];
                                     fs119_address[i] = row119[4];
                                 }
 
-                                for (var i = 0; i < fireinfo.length; i++) {
+                                for (var i = 0; i < 200; i++) {
                                     fa_address[i] = fireinfo[i]["긴급구조시"] + " " + fireinfo[i]["긴급구조구"] + " " + fireinfo[i]["긴급구조동"] + " " + fireinfo[i]["긴급구조리"];
                                     fa_119name[i] = fireinfo[i]["출동안전센터_지역대"];
                                     fa_fsname[i] = fireinfo[i]["출동소방서"];
                                 }
 
 
-                                for (let i = 0; i < fireinfo.length; i++) {
+                                for (let i = 0; i < 200; i++) {
                                     let arrivetime = String(fireinfo[i]["현장도착시각"]); //시각이 12:30으로 되어있으므로 : 분리를 해서 시간과 분으로 표시
                                     let calltime = String(fireinfo[i]["신고시각"]);
                                     const timediff = new timeDiff(arrivetime, calltime);
 
                                     if (arrivetime === 'null') { //도착시간이 null값인 경우 보라색으로 지정
                                         timediff.colordiff = 'purple';
-                                    } 
+                                    }
 
                                     let content_fa_info = "소방서 : " + fireinfo[i]["출동소방서"] + "<br>신고시각 : " + fireinfo[i]["신고시각"] + "<br>출동시각 : " + fireinfo[i]["출동시각"] + "<br>도착시각 : " + fireinfo[i]["현장도착시각"];
                                     let fa_address = fireinfo[i]["긴급구조시"] + " " + fireinfo[i]["긴급구조구"] + " " + fireinfo[i]["긴급구조동"] + " " + fireinfo[i]["긴급구조리"];
- 
+
                                     new kakao.maps.services.Geocoder().addressSearch(fa_address, function (result, status) {
                                         if (status === kakao.maps.services.Status.OK) {
                                             var lat = result[0].y;
@@ -240,6 +209,7 @@
                                             // 마커를 생성합니다.
                                             const marker = new FSMarker(lat, lng, fs_name);
                                             marker.createMarker(map);
+                                            let path = [new kakao.maps.LatLng(lat, lng)];
 
                                             // 원을 생성하고 지도에 표시합니다.
                                             var circle = new kakao.maps.Circle({
@@ -254,26 +224,35 @@
                                             });
                                             circle.setMap(map);
 
-                                            for (let j = 0; j < fireinfo.length; j++) {
+                                            //선 생성을 위해 화재구역 좌표를 얻어내는 중
+                                            for (let j = 0; j < 200; j++) {
                                                 if (fa_fsname[j] == fs_name[i]) {
-
                                                     new kakao.maps.services.Geocoder().addressSearch(fa_address[j], function (result, status) {
                                                         if (status === kakao.maps.services.Status.OK) {
                                                             var falat = result[0].y;
                                                             var falng = result[0].x;
+
+                                                            //이 부분만 해결하면 모든게 해결된다
+                                                            path.push(new kakao.maps.LatLng(lat, lng));
+                                                            path.push(new kakao.maps.LatLng(falat, falng));
+
+                                                            marker.createPolyLine(path);
+                                                            marker.existline(map);
                                                         }
-                                                        marker.createPolyLine(falat, falng, map);
 
                                                     })
+
                                                 }
                                             }
+
+
                                         }
                                     });
                                 }
 
 
 
-                                for (let i = 0; i < 300; i++) { //csv파일이 너무 많아서 일단 300으로 고정
+                                for (let i = 0; i < 100; i++) { //csv파일이 너무 많아서 일단 300으로 고정
 
                                     new kakao.maps.services.Geocoder().addressSearch(fs119_address[i], function (result, status) {
                                         let fs119_lat;
@@ -299,33 +278,16 @@
                                             });
 
 
-                                            // for (let j = 0; j < fireinfo.length; j++) {
-                                            //     if (fa_119name[j] != "119구조대") {
-                                            //         let fskeyword = fa_fsname[j] + ' ' + fa_119name[j];
-                                            //         new kakao.maps.services.Places().keywordSearch(fskeyword, function (data, status, pagination) {
-                                            //             let lat119;
-                                            //             let lng119;
-
-                                            //             if (status === kakao.maps.services.Status.OK) {
-                                            //                 lat119 = data[0].y;
-                                            //                 lng119 = data[0].x;
-                                            //                 circle.setMap(map);
-                                            //             }
-
-                                            //             if (fs119_lat == lat119 && fs119_lng == lng119) {
-                                            //                 new kakao.maps.services.Geocoder().addressSearch(fa_address[j], function (result, status) {
-                                            //                     if (status === kakao.maps.services.Status.OK) {
-                                            //                         var falat = result[0].y;
-                                            //                         var falng = result[0].x;
-                                            //                     }
-                                            //                     marker.createPolyLine(falat, falng, map);
-                                            //                 })
-                                            //             }
-
-                                            //         });
-
-                                            //     }
-                                            // }
+                                            for (let j = 0; j < 100; j++) {
+                                                if (fa_119name[j] != "119구조대" && fs119_name[i].includes(fa_119name[j])) {
+                                                    new kakao.maps.services.Geocoder().addressSearch(fa_address[j], function (result, status) {
+                                                        if (status === kakao.maps.services.Status.OK) {
+                                                            var falat = result[0].y;
+                                                            var falng = result[0].x;
+                                                        }
+                                                    });
+                                                }
+                                            }
                                         }
                                     });
                                 }
