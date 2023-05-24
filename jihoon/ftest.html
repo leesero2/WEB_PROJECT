@@ -87,9 +87,6 @@
             else ageScore = 10;
             buildingScore += ageWeight * ageScore;
 
-            //console.log(buildingScore);
-
-
             // 주용도별 점수
             var usageScore = 0;
             switch (building["주용도코드명"]) {
@@ -223,13 +220,13 @@
 
         // 화재위험지수에 따라 안전 수준을 분류하는 함수
         function classifySafetyLevel(score) {
-            if (score >= 0 && score <= 2) {
+            if (score >= 0 && score <= 3) {
                 return '안전';
-            } else if (score > 2 && score <= 5) {
+            } else if (score > 3 && score <= 6) {
                 return '보통';
-            } else if (score > 5 && score <= 6) {
+            } else if (score > 6 && score <= 8) {
                 return '위험';
-            } else if (score > 6 && score <= 10) {
+            } else if (score > 8 && score <= 10) {
                 return '매우위험';
             } else {
                 return '알 수 없음';
@@ -251,7 +248,7 @@
             Promise.all([loadBuildingData(), loadFireStationData()])
                 .then(function () {
                     // dataBuildings에서 모든 건물을 순회하며 위험한 건물과 매우 위험한 건물에 대해 마커를 생성하고 지도에 표시합니다.
-                    for (let i = 0; i < Math.min(10000, dataBuildings.length); i++) { //테스트용으로 300개만 실행시키는 반복문 
+                    for (let i = 0; i < Math.min(3000, dataBuildings.length); i++) { //테스트용으로 300개만 실행시키는 반복문 
                         //for (var i = 0; i < dataBuildings.length; i++) { //이게 모든 건물을 출력하는 반복문
                         var building = dataBuildings[i];
                         var buildingScore = calculateBuildingScore(building);
