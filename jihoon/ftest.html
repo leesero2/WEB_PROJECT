@@ -28,7 +28,7 @@
         function loadBuildingData() {
             return new Promise(function (resolve, reject) {
                 $.ajax({
-                    url: 'new_부산_기장군.csv',
+                    url: 'new_부산_동래구.csv',
                     dataType: 'text',
                     success: function (data) {
                         $.csv.toObjects(data, {}, function (err, data) {
@@ -72,10 +72,10 @@
             var buildingAge = new Date().getFullYear() - parseInt(building["사용승인일"].substring(0, 4));
 
             // 가중치 정의
-            var ageWeight = 0.2;
+            var ageWeight = 0.4;
             var usageWeight = 0.3;
-            var structureWeight = 0.3;
-            var distanceWeight = 0.2;
+            var structureWeight = 0.15;
+            var distanceWeight = 0.15;
 
             // 노후별 점수
             var ageScore = 0;
@@ -188,10 +188,7 @@
             }
             buildingScore += structureWeight * structureScore;
 
-            // 소방서 거리별 점수 (여기가 문제, 가장 가까운 소방서로 기준을 잡아야함 이것만 해결하면 끝)
-
-
-
+            // 소방서 거리별 점수 
             var distanceScore = 0;
             var nearestFireStationDistance = Number.MAX_SAFE_INTEGER;
             var nearestFireStation;
@@ -254,7 +251,7 @@
             Promise.all([loadBuildingData(), loadFireStationData()])
                 .then(function () {
                     // dataBuildings에서 모든 건물을 순회하며 위험한 건물과 매우 위험한 건물에 대해 마커를 생성하고 지도에 표시합니다.
-                    for (let i = 0; i < Math.min(300, dataBuildings.length); i++) { //테스트용으로 100개만 실행시키는 반복문 
+                    for (let i = 0; i < Math.min(10000, dataBuildings.length); i++) { //테스트용으로 300개만 실행시키는 반복문 
                         //for (var i = 0; i < dataBuildings.length; i++) { //이게 모든 건물을 출력하는 반복문
                         var building = dataBuildings[i];
                         var buildingScore = calculateBuildingScore(building);
@@ -277,5 +274,4 @@
         processMap();
     </script>
 </body>
-
 </html>
