@@ -86,7 +86,7 @@
             else if (buildingAge < 50) ageScore = 9;
             else ageScore = 10;
             buildingScore += ageWeight * ageScore;
-            
+
             //console.log(buildingScore);
 
 
@@ -188,20 +188,28 @@
             }
             buildingScore += structureWeight * structureScore;
 
-            // 소방서 거리별 점수
+            // 소방서 거리별 점수 (여기가 문제, 가장 가까운 소방서로 기준을 잡아야함 이것만 해결하면 끝)
+
+
+
             var distanceScore = 0;
             var nearestFireStationDistance = Number.MAX_SAFE_INTEGER;
+            var nearestFireStation;
             for (var i = 0; i < dataFireStations.length; i++) {
                 var fireStation = dataFireStations[i];
                 var distance = geolib.getDistance(
-                    { latitude: parseFloat(building["y"]), longitude: parseFloat(building["x"]) },
+                    { latitude: parseFloat(building["x"]), longitude: parseFloat(building["y"]) },
                     { latitude: parseFloat(fireStation["위도"]), longitude: parseFloat(fireStation["경도"]) }
                 );
                 if (distance < nearestFireStationDistance) {
                     nearestFireStationDistance = distance;
+                    nearestFireStation = fireStation;
                 }
             }
-            nearestFireStationDistance = nearestFireStationDistance / 1000; // convert to km
+            nearestFireStationDistance = nearestFireStationDistance / 1000;// convert to km
+            console.log("가장 가까운 소방서:", nearestFireStation);
+            console.log("소방서까지의 거리:", nearestFireStationDistance);
+
 
             // 소방서 거리별 점수를 추가합니다.
             if (nearestFireStationDistance < 1) distanceScore = 0;
@@ -212,22 +220,23 @@
             buildingScore += distanceWeight * distanceScore;
 
             return buildingScore;
-            
+
         } //여기까지 알고리즘.
 
-        
+
         // 화재위험지수에 따라 안전 수준을 분류하는 함수
         function classifySafetyLevel(score) {
             if (score >= 0 && score <= 2) {
                 return '안전';
-            } else if (score >= 3 && score <= 5) {
+            } else if (score > 2 && score <= 5) {
                 return '보통';
-            } else if (score >= 6 && score <= 7) {
+            } else if (score > 5 && score <= 6) {
                 return '위험';
-            } else if (score >= 8 && score <= 10) {
+            } else if (score > 6 && score <= 10) {
                 return '매우위험';
             } else {
                 return '알 수 없음';
+
             }
         }
 
@@ -245,8 +254,8 @@
             Promise.all([loadBuildingData(), loadFireStationData()])
                 .then(function () {
                     // dataBuildings에서 모든 건물을 순회하며 위험한 건물과 매우 위험한 건물에 대해 마커를 생성하고 지도에 표시합니다.
-                    //for (let i = 0; i < Math.min(100, dataBuildings.length); i++) { //테스트용으로 100개만 실행시키는 반복문 
-                        for (var i = 0; i < dataBuildings.length; i++) { //이게 모든 건물을 출력하는 반복문
+                    for (let i = 0; i < Math.min(300, dataBuildings.length); i++) { //테스트용으로 100개만 실행시키는 반복문 
+                        //for (var i = 0; i < dataBuildings.length; i++) { //이게 모든 건물을 출력하는 반복문
                         var building = dataBuildings[i];
                         var buildingScore = calculateBuildingScore(building);
                         var safetyLevel = classifySafetyLevel(buildingScore);
@@ -254,10 +263,9 @@
                         console.log("건물별 위험 점수: " + buildingScore); //여기에 구현함 그런데 점수는 나옴.
                         console.log("건물별 위험 등급 :" + safetyLevel);
 
-                        if (safetyLevel === '위험' || safetyLevel === '매우위험') {
+                        if (safetyLevel === '위험' || safetyLevel === '매우위험') { //위험과 매우위험만을 출력함.
                             var position = new kakao.maps.LatLng(parseFloat(building["x"]), parseFloat(building["y"]));
                             displayMarker(position);
-                            
                         }
                     }
                 })
