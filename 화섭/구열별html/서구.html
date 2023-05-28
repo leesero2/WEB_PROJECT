@@ -1,0 +1,70 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>다음 지도 API</title>
+
+    <style>
+        #map-container {
+            position: relative;
+            width: 100%;
+            height: 1000px;
+            z-index: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .fixed-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1;
+            background-color: #f44336;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .fixed-button a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map" style="width: 100%; height: 1000px"></div>
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+
+    <button class="fixed-button">
+        <a href="/bootstrap/webproject/html/메인기능/부산.html" target="_self">뒤로가기</a>
+    </button>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c5399006405c2e57b967f4927e409e76&libraries=services"></script>
+
+    <script>
+
+        var mapContainer = document.getElementById('map'),
+            mapOption = {
+                center: new kakao.maps.LatLng(35.1031, 129.0149),
+                level: 6
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption),
+            customOverlay = new kakao.maps.CustomOverlay({}),
+            infowindow = new kakao.maps.InfoWindow({ removable: true });
+
+    </script>
+</body>
+
+</html>
