@@ -31,7 +31,8 @@
             createMarker(map) {
                 this.marker = new kakao.maps.Marker({
                     position: new kakao.maps.LatLng(this.lat, this.lng),
-                    map: map
+                    map: map,
+                    image : fs_image
                 });
             }
 
@@ -61,7 +62,7 @@
 
         var mapContainer = document.getElementById("map"); // 지도를 표시할 div
         var mapOption = {
-            center: new kakao.maps.LatLng(37.63417, 127.01397), // 지도의 중심좌표
+            center: new kakao.maps.LatLng(35.1515543, 129.0556416), // 지도의 중심좌표
             level: 7, // 지도의 확대 레벨
             mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
         };
@@ -120,11 +121,11 @@
 
                                 for (var i = 0; i < 100; i++) { //화재구역 지금 여기서 오류난다
 
-                                    let content_fa_info = '<div style="width: 200px; height: 40px; padding:5px;">소방서 : '+ fa_119name[i] +"</div>";
-                                    
                                     let lat = falat[i];
                                     let lng = falng[i];
                                     let time = fa_time[i];
+
+                                    let content_fa_info = '<div style="width: 200px; height: 40px; padding:5px;">소방서 : '+ fa_119name[i] + "<br>소요시간 : " + time +"</div>";
 
                                     let colordiff = 'black';
                                     if(time <= 700) {
@@ -168,34 +169,6 @@
                                     });
 
                                 }
-
-                                for (var i = 0; i < firestation.length; i++) { //소방서 위치 
-                                    new kakao.maps.services.Geocoder().addressSearch(String(fs_address[i]), function (result, status) {
-                                        if (status === kakao.maps.services.Status.OK) {
-                                            var lat = result[0].y;
-                                            var lng = result[0].x;
-
-                                            // 마커를 생성합니다.
-                                            const marker = new FSMarker(lat, lng, fs_name);
-                                            marker.createMarker(map);
-
-                                            // 원을 생성하고 지도에 표시합니다.
-                                            var circle = new kakao.maps.Circle({
-                                                center: new kakao.maps.LatLng(lat, lng),
-                                                radius: 500,
-                                                strokeWeight: 3,
-                                                strokeColor: 'green',
-                                                strokeOpacity: 1,
-                                                strokeStyle: 'solid',
-                                                fillColor: 'green',
-                                                fillOpacity: 0.5
-                                            });
-                                            circle.setMap(map);
-
-                                        }
-                                    });
-                                }
-
 
 
                                 for (var i = 0; i < fs119.length; i++) { //119안전센터 구역
