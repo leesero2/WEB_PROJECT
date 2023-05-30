@@ -113,16 +113,15 @@
         showLoadingOverlay();
 
         class BMarker {
-            constructor(lat, lng) {
-                this.lat = lat;
-                this.lng = lng;
+            constructor(position) {
+                this.position = position;
                 this.marker = null;
             }
 
             createMarker(map) {
                 if(this.marker == null) {
                     this.marker = new kakao.maps.Marker({
-                        position: new kakao.maps.LatLng(this.lat, this.lng),
+                        position: this.position,
                         map: map
                     });
                 }
@@ -384,19 +383,19 @@
                         console.log("건물별 위험 점수: " + buildingScore); //여기에 구현함 그런데 점수는 나옴.
                         console.log("건물별 위험 등급 :" + safetyLevel);
 
-                        if (safetyLevel === '매우위험') { //위험과 매우위험만을 출력함.
-                            var position = new kakao.maps.LatLng(parseFloat(building["x"]), parseFloat(building["y"]));
+                        if (safetyLevel == '매우위험') { //위험과 매우위험만을 출력함.
+                            let position = new kakao.maps.LatLng(parseFloat(building["x"]), parseFloat(building["y"]));
                             toodanger.push(position);
                             //마커를 3개를 생성하고 골든타임 알고리즘 적용, 버튼 함수는 버튼 3개에 따라 하는게 아니라, 마커별로 조건을 달기
                         }
 
-                        if (safetyLevel === '위험') { //위험과 매우위험만을 출력함.
-                            var position = new kakao.maps.LatLng(parseFloat(building["x"]), parseFloat(building["y"]));
+                        if (safetyLevel == '위험') { //위험과 매우위험만을 출력함.
+                            let position = new kakao.maps.LatLng(parseFloat(building["x"]), parseFloat(building["y"]));
                             danger.push(position);
                         }
 
-                        if (safetyLevel === '보통') { //위험과 매우위험만을 출력함.
-                            var position = new kakao.maps.LatLng(parseFloat(building["x"]), parseFloat(building["y"]));
+                        if (safetyLevel == '보통') { //위험과 매우위험만을 출력함.
+                            let position = new kakao.maps.LatLng(parseFloat(building["x"]), parseFloat(building["y"]));
                             soso.push(position);
                         }
                     }
@@ -417,10 +416,8 @@
                 // 버튼 1에 대한 동작 수행
                 console.log("버튼이 눌러지긴 했음");
                 for(var i = 0; i < 5; i++) {
-                    let lat = parseFloat(toodanger[i][0]);
-                    let lng = parseFloat(toodanger[i][1]);
-                    const marker = new BMarker(lat, lng);
-                    console.log(parseFloat(toodanger[i]));
+                    let position = toodanger[i];
+                    const marker = new BMarker(position);
                     marker.createMarker(map);
                 }
             } else if (buttonId == 'LV2') {
