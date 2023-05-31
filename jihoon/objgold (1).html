@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>골든타임</title>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c5399006405c2e57b967f4927e409e76&libraries=services"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+
+<body>
+    <div id="map" style="width: 100%; height: 1000px"></div>
+    <div></div>
+    <div id="range-container">
+        <input type="range" min="1" max="1000" value="50" id="myRange">
+        <div id="labels">
+            <span>0</span>
+            <span>500</span>
+            <span>1000</span>
+        </div>
+    </div>
+    <!-- 아래는 range 태그 스타일 속성 -->
+    <style>
+        #range-container {
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            /* add this line */
+        }
+
+        #myRange {
+            width: 100%;
+        }
+
+        #labels {
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            width: 100%;
+            top: -20px;
+        }
+    </style>
+
+    <script>
+        //소방서, 센터 마커를 이미지 마커로 변경
+        var fs_image_src = 'firestation.png';
+        var fs_image_size = new kakao.maps.Size(20, 20);
+        var fs_image_op = { offset: new kakao.maps.Point(10, 10) };
+
+        var circles = []; //range의 원 갯수를 나타냄
+
+        var fs_image = new kakao.maps.MarkerImage(fs_image_src, fs_image_size, fs_image_op);
+
+        class FSMarker {
+            constructor(lat, lng, name) {
+                this.lat = lat;
+                this.lng = lng;
+                this.name = name;
+                this.marker = null;
+                this.polyline = null;
+                this.count = 0;
+            }
+
+            createMarker(map) {
+                this.marker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(this.lat, this.lng),
+                    map: map,
+                    image: fs_image
+                });
+            }
+
+            createPolyLine(path) {
+                this.polyline = new kakao.maps.Polyline({
+                    path: path, // 선을 구성하는 좌표배열 입니다
+                    strokeWeight: 5, // 선의 두께 입니다
+                    strokeColor: 'blue', // 선의 색깔입니다
+                    strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                    strokeStyle: 'solid' // 선의 스타일입니다
+                });
+            }
+
+            existline(map) {
+                const polyline = this.polyline;
+
+                kakao.maps.event.addListener(this.marker, 'click', function () {
+                    if (polyline.getMap()) {
+                        polyline.setMap(null);
+                    } else {
+                        polyline.setMap(map);
+                    }
+                });
+            }
+
+        }
+
+        var mapContainer = document.getElementById("map"); // 지도를 표시할 div
+        var mapOption = {
+            center: new kakao.maps.LatLng(35.1515543, 129.0556416), // 지도의 중심좌표
+            level: 7, // 지도의 확대 레벨
+            mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
+        };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        fetch('firestation.csv')
+            .then(response => response.text())
+            .then(csvData => {
+                var firestation = csvData.split('\n');
+
+                //소방서 위치와 이름을 배열로 저장
+                var fs_name = [];
+                var fs_address = [];
+                fetch('new_fs119.csv')
+                    .then(response => response.text())
+                    .then(csvData => {
+                        var fs119 = csvData.split('\n');
+                        //119안전센터의 위치와 이름을 배열로 저장
+                        var fs119_name = [];
+                        var fs119_lat = [];
+                        var fs119_lng = [];
+                        fetch('화재출동 현황(부산)_fix.csv')
+                            .then(response => response.text())
+                            .then(csvData => {
+                                //화재현장 관련 데이터 접근 변수
+                                var fireinfo = csvData.split('\n');
+
+                                var falat = [];
+                                var falng = [];
+                                var fa_119name = [];
+                                var fa_time = [];
+
+                                for (var i = 0; i < firestation.length; i++) { //소방서 배열 초기화
+                                    var rowfs = firestation[i].split(',');
+                                    fs_name[i] = rowfs[2];
+                                    fs_address[i] = rowfs[3];
+                                }
+
+                                for (var i = 0; i < fs119.length; i++) { //119안전센터 배열 초기화
+                                    var row119 = fs119[i].split(',');
+                                    fs119_name[i] = row119[0];
+                                    fs119_lat[i] = row119[4];
+                                    fs119_lng[i] = row119[3];
+                                }
+
+                                for (var i = 0; i < fireinfo.length; i++) { //화재출동 현황 데이터
+                                    var row = fireinfo[i].split(',');
+                                    if (row[38] != undefined && row[37] != undefined) {
+                                        falat[i] = row[38];
+                                        falng[i] = row[37];
+                                        fa_119name[i] = row[26];
+                                        // Split minute and second from fa_time[i]
+                                        let minute = parseInt(row[28].slice(0, -2));
+                                        let second = parseInt(row[28].slice(-2));
+                                        fa_time[i] = minute.toString().padStart(2, '0') + '분 ' + second.toString().padStart(2, '0') + '초';
+                                    }
+                                }
+
+
+                                //화재구역
+                                let inputRange = document.getElementById("myRange");
+                                inputRange.addEventListener("input", function () {
+                                    // Remove all existing circles first
+                                    for (let circle of circles) {
+                                        circle.setMap(null);
+                                    }
+                                    //circles = [];
+
+                                    let numberOfCircles = inputRange.value;
+
+                                    for (let i = 0; i < numberOfCircles; i++) {
+                                        let lat = falat[i];
+                                        let lng = falng[i];
+                                        let time = fa_time[i];
+                                        let minute = parseInt(time.slice(0, -3));
+                                        let content_fa_info = '<div style="width: 200px; height: 40px; padding:5px;">소방서 : ' + fa_119name[i] + "<br>소요시간 : " + time + "</div>";
+                                        let colordiff = 'black';
+                                        if (minute <= 7) {
+                                            colordiff = 'green';
+                                        }
+                                        else {
+                                            colordiff = 'red';
+                                        }
+
+                                        var circle = new kakao.maps.Circle({
+                                            center: new kakao.maps.LatLng(lat, lng),  // 원의 중심좌표 입니다 
+                                            radius: 300, // 미터 단위의 원의 반지름입니다 
+                                            strokeWeight: 5, // 선의 두께입니다 
+                                            strokeColor: colordiff, // 선의 색깔입니다
+                                            strokeOpacity: 0.3, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                                            strokeStyle: 'solid', // 선의 스타일 입니다
+                                            fillColor: colordiff, // 채우기 색깔입니다
+                                            fillOpacity: 0.3  // 채우기 불투명도 입니다   
+                                        });
+                                        circle.setMap(map);
+
+                                        let iwPosition = new kakao.maps.LatLng(lat, lng); //인포윈도우 표시 위치입니다
+                                        let infowindow = new kakao.maps.InfoWindow({
+                                            position: iwPosition,
+                                            content: content_fa_info
+                                        });
+
+                                        kakao.maps.event.addListener(circle, 'click', function () {
+                                            infowindow.setContent(content_fa_info);
+
+                                            let marker = new kakao.maps.Marker({
+                                                position: iwPosition,
+                                                map: null // 마커를 생성하지만 지도에 표시하지 않습니다.
+                                            });
+
+                                            if (infowindow.getMap()) {
+                                                infowindow.close();
+                                            } else {
+                                                infowindow.open(map, marker);
+                                            }
+                                        });
+                                        circles.push(circle);
+
+                                    }
+
+                                    for (var i = 0; i < fs119.length; i++) {
+                                        let lat = fs119_lat[i];
+                                        let lng = fs119_lng[i];
+                                        let name119 = fs119_name[i];
+
+                                        // Create a marker.
+                                        const marker = new FSMarker(lat, lng, name119);
+                                        marker.createMarker(map);
+
+                                        for (let j = 0; j < 100; j++) {
+                                            let faname119 = fa_119name[j];
+                                            let fa_lat = falat[j];
+                                            let fa_lng = falng[j];
+                                            if (name119 == faname119) {
+
+                                                let path = [
+                                                    new kakao.maps.LatLng(lat, lng),  // path initialization for each fire location
+                                                    new kakao.maps.LatLng(fa_lat, fa_lng),
+                                                    new kakao.maps.LatLng(lat, lng)
+                                                ];
+
+                                                marker.createPolyLine(path);
+                                                marker.existline(map);
+                                            }
+                                        }
+                                    }
+
+                                });
+
+                            });
+
+                    })
+            });
+    </script>
+</body>
+
+</html>
