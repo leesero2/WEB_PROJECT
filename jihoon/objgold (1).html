@@ -12,7 +12,7 @@
     <div id="map" style="width: 100%; height: 1000px"></div>
     <div></div>
     <div id="range-container">
-        <input type="range" min="1" max="1000" value="50" id="myRange">
+        <input type="range" min="1" max="5000" value="50" id="myRange">
         <div id="labels">
             <span>0</span>
             <span>500</span>
@@ -72,7 +72,7 @@
             createPolyLine(path) {
                 this.polyline = new kakao.maps.Polyline({
                     path: path, // 선을 구성하는 좌표배열 입니다
-                    strokeWeight: 5, // 선의 두께 입니다
+                    strokeWeight: 2, // 선의 두께 입니다
                     strokeColor: 'blue', // 선의 색깔입니다
                     strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
                     strokeStyle: 'solid' // 선의 스타일입니다
@@ -128,6 +128,38 @@
                                 var fa_119name = [];
                                 var fa_time = [];
 
+
+
+                                // Handle the logic related to the fire station markers and lines
+                                // Handle the logic related to the fire station markers and lines
+                                function handleFSMarkers(fs119, fs119_name, fs119_lat, fs119_lng, falat, falng, fa_119name) {
+                                    for (var i = 0; i < fs119.length; i++) {
+                                        let lat = fs119_lat[i];
+                                        let lng = fs119_lng[i];
+                                        let name119 = fs119_name[i];
+
+                                        const marker = new FSMarker(lat, lng, name119);
+                                        marker.createMarker(map);
+
+                                        for (let j = 0; j < fa_119name.length; j++) {  // iterate over all fire locations
+                                            let faname119 = fa_119name[j];
+                                            let fa_lat = falat[j];
+                                            let fa_lng = falng[j];
+                                            if (name119 == faname119) {
+                                                // Create a path for each fire location connected to the fire station.
+                                                let path = [
+                                                    new kakao.maps.LatLng(lat, lng),
+                                                    new kakao.maps.LatLng(fa_lat, fa_lng),
+                                                    new kakao.maps.LatLng(lat, lng)
+                                                ];
+
+                                                marker.createPolyLine(path);
+                                                marker.existline(map);
+                                            }
+                                        }
+                                    }
+                                }
+
                                 for (var i = 0; i < firestation.length; i++) { //소방서 배열 초기화
                                     var rowfs = firestation[i].split(',');
                                     fs_name[i] = rowfs[2];
@@ -153,6 +185,9 @@
                                         fa_time[i] = minute.toString().padStart(2, '0') + '분 ' + second.toString().padStart(2, '0') + '초';
                                     }
                                 }
+
+                                // Call handleFSMarkers function here, right after fetching all the data
+                                handleFSMarkers(fs119, fs119_name, fs119_lat, fs119_lng, falat, falng, fa_119name);
 
 
                                 //화재구역
@@ -214,33 +249,6 @@
                                         });
                                         circles.push(circle);
 
-                                    }
-
-                                    for (var i = 0; i < fs119.length; i++) {
-                                        let lat = fs119_lat[i];
-                                        let lng = fs119_lng[i];
-                                        let name119 = fs119_name[i];
-
-                                        // Create a marker.
-                                        const marker = new FSMarker(lat, lng, name119);
-                                        marker.createMarker(map);
-
-                                        for (let j = 0; j < 100; j++) {
-                                            let faname119 = fa_119name[j];
-                                            let fa_lat = falat[j];
-                                            let fa_lng = falng[j];
-                                            if (name119 == faname119) {
-
-                                                let path = [
-                                                    new kakao.maps.LatLng(lat, lng),  // path initialization for each fire location
-                                                    new kakao.maps.LatLng(fa_lat, fa_lng),
-                                                    new kakao.maps.LatLng(lat, lng)
-                                                ];
-
-                                                marker.createPolyLine(path);
-                                                marker.existline(map);
-                                            }
-                                        }
                                     }
 
                                 });
