@@ -43,6 +43,7 @@
 
     <script>
         //소방서, 센터 마커를 이미지 마커로 변경
+        let polyline = null; // 선에 대한 참조를 유지하는 외부 변수 선언
         var fs_image_src = 'firestation.png';
         var fs_image_size = new kakao.maps.Size(20, 20);
         var fs_image_op = { offset: new kakao.maps.Point(10, 10) };
@@ -128,9 +129,6 @@
                                 var fa_119name = [];
                                 var fa_time = [];
 
-
-
-                                // Handle the logic related to the fire station markers and lines
                                 // Handle the logic related to the fire station markers and lines
                                 function handleFSMarkers(fs119, fs119_name, fs119_lat, fs119_lng, falat, falng, fa_119name) {
                                     for (var i = 0; i < fs119.length; i++) {
@@ -246,6 +244,32 @@
                                             } else {
                                                 infowindow.open(map, marker);
                                             }
+
+
+                                            let fireStationIndex = fs119_name.indexOf(fa_119name[i]);
+                                            if (fireStationIndex !== -1) {
+                                                let path = [
+                                                    new kakao.maps.LatLng(fs119_lat[fireStationIndex], fs119_lng[fireStationIndex]),
+                                                    new kakao.maps.LatLng(lat, lng)
+                                                ];
+
+                                                if (!polyline) { // 선이 없을 때
+                                                    polyline = new kakao.maps.Polyline({
+                                                        path: path,
+                                                        strokeWeight: 2,
+                                                        strokeColor: 'blue',
+                                                        strokeOpacity: 0.7,
+                                                        strokeStyle: 'solid'
+                                                    });
+                                                    polyline.setMap(map);
+                                                } else { // 선이 이미 있을 때
+                                                    polyline.setMap(null);
+                                                    polyline = null;
+                                                }
+
+                                            }
+
+
                                         });
                                         circles.push(circle);
 
