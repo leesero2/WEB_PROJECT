@@ -44,6 +44,7 @@
         }
 
         .b-example-divider {
+            width: 100%;
             height: 3rem;
             background-color: rgba(0, 0, 0, .1);
             border: solid rgba(0, 0, 0, .15);
@@ -80,16 +81,31 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        .btn-bd-primary {
+            --bd-violet-bg: #712cf9;
+            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+            --bs-btn-font-weight: 600;
+            --bs-btn-color: var(--bs-white);
+            --bs-btn-bg: var(--bd-violet-bg);
+            --bs-btn-border-color: var(--bd-violet-bg);
+            --bs-btn-hover-color: var(--bs-white);
+            --bs-btn-hover-bg: #6528e0;
+            --bs-btn-hover-border-color: #6528e0;
+            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+            --bs-btn-active-color: var(--bs-btn-hover-color);
+            --bs-btn-active-bg: #5a23c8;
+            --bs-btn-active-border-color: #5a23c8;
+        }
+
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
+
         a {
             text-decoration: none;
-            color: inherit;
+            color: #F8F8F8;
         }
-
-        .strong-text {
-        font-size: 20px;
-        text-align: center;
-        }
-
     </style>
 
 
@@ -97,8 +113,7 @@
     <link href="/bootstrap/webproject/css/cheatsheet.css" rel="stylesheet">
 </head>
 
-<body class="bg-light">
-
+<body>
     <header class="bd-header bg-dark py-3 d-flex align-items-stretch border-bottom border-dark">
         <div class="container-fluid d-flex align-items-center">
             <h1 class="d-flex align-items-center fs-4 text-white mb-0">
@@ -109,21 +124,24 @@
             <a href="/docs/5.2/examples/cheatsheet-rtl/" class="ms-auto link-light" hreflang="ar">RTL cheatsheet</a>
         </div>
     </header>
+
+    <!-- 오른쪽 베너 부분 -->
     <aside class="bd-aside sticky-xl-top text-muted align-self-start mb-3 mb-xl-5 px-2">
         <h2 class="h6 pt-4 pb-3 mb-4 border-bottom">웹사이트 소개</h2>
         <nav class="small" id="toc">
             <ul class="list-unstyled">
 
                 <li class="my-2">
-                    <li><a href="/bootstrap/webproject/html/지역비교하기.html" target="_self"><strong class="strong-text">지역비교</strong><br></a></li>
-                    <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse"
-                        aria-expanded="false" data-bs-target="#contents-collapse"
-                        aria-controls="contents-collapse">화재예방</button>
-                    <ul class="list-unstyled ps-3 collapse" id="contents-collapse">
-                        <li><a href="/bootstrap/webproject/html/소화기사용방법.html" target="_self">소화용품 사용 방법</a></li>
-                        <li><a href="/bootstrap/webproject/html/화재발생시행동요령.html" target="_self">화재 발생시 행동 요령</a></li>
+                <li><a href="/bootstrap/webproject/html/지역비교하기.html" target="_self"><strong
+                            class="strong-text">지역비교</strong><br></a></li>
+                <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse"
+                    aria-expanded="false" data-bs-target="#contents-collapse"
+                    aria-controls="contents-collapse">화재예방</button>
+                <ul class="list-unstyled ps-3 collapse" id="contents-collapse">
+                    <li><a href="/bootstrap/webproject/html/소화기사용방법.html" target="_self">소화용품 사용 방법</a></li>
+                    <li><a href="/bootstrap/webproject/html/화재발생시행동요령.html" target="_self">화재 발생시 행동 요령</a></li>
 
-                    </ul>
+                </ul>
                 </li>
                 <li class="my-2">
                     <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse"
@@ -132,7 +150,8 @@
                     <ul class="list-unstyled ps-3 collapse" id="forms-collapse">
                         <li>
 
-                            <a href="/bootstrap/webproject/html/건물종류별대처방법.html" target="_self">건물 종류 별 대처 방법</a></li>
+                            <a href="/bootstrap/webproject/html/건물종류별대처방법.html" target="_self">건물 종류 별 대처 방법</a>
+                        </li>
                         <li><a href="/bootstrap/webproject/html/건물구조별대처방법.html" target="_self">건물 구조 별 대처 방법</a></li>
                     </ul>
                 </li>
@@ -140,31 +159,6 @@
             </ul>
         </nav>
     </aside>
-    <div class="bd-cheatsheet container-fluid bg-body">
-        <section id="content">
-            <h2 class="sticky-xl-top fw-bold pt-3 pt-xl-5 pb-2 pb-xl-3">Contents</h2>
-
-            <article class="my-3" id="typography">
-                <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
-                    <h3>Typography</h3>
-                    <a class="d-flex align-items-center" href="/docs/5.2/content/typography/">지역선택하기</a>
-                    <a class="d-flex align-items-center" href="/bootstrap/webproject/html/1.html">차트</a>
-                </div>
-
-                <div>
-                    <div class="bd-example-snippet bd-code-snippet">
-                        <div class="bd-example">
-                            <p class="display-1">지도 위치</p>
-                        </div>
-                    </div>
-
-
-                    <div class="bd-example-snippet bd-code-snippet">
-                        <div class="bd-example">
-                            <p class="h1">차트 위치</p>
-                        </div>
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
