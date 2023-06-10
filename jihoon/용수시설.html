@@ -1,48 +1,116 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<meta charset="utf-8">
-	<title>카카오 지도 API</title>
+    <meta charset="utf-8">
+    <title>카카오 지도 API</title>
 </head>
+
 <body>
-	<div id="map" style="width:100%;height:1000px;"></div>
+    <div id="map" style="width:100%;height:700px;"></div>
 
-	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d882269976572c582016903ea3e8c781&libraries=services"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-	<script>
-		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-		    mapOption = {
-		        center: new kakao.maps.LatLng(37.56682, 126.97865), // 지도의 중심좌표
-		        level: 3, // 지도의 확대 레벨
-		        mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도종류
-		    }; 
+    <select id="provinceSelect" onchange="displayCity(this.value)">
+        <option>선택하세요</option>
+        <option value="서울특별시">서울특별시</option>
+        <option value="부산광역시">부산광역시</option>
+        <!-- add other provinces -->
+    </select>
 
-		// 지도를 생성한다 
-		var map = new kakao.maps.Map(mapContainer, mapOption); 
+    <select id="citySelect" onchange="displayFacilities(this.value)">
+    </select>
 
-		var xhr = new XMLHttpRequest();
-		var url = 'http://api.data.go.kr/openapi/tn_pubr_public_ffus_wtrcns_api'; // URL
-		var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + 'y56nrcR50aqQCfbrW4zNSkIQjCQR10mfxAQxmNDOPnT4N%2FBZ0g5jXFaJ0%2FSsXyzrZrvZEmh23Ryp1fCpH4RIeQ%3D%3D'; // Service Key
-		queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); // 페이지 번호
-		queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('100'); // 한 페이지 결과 수
-		queryParams += '&' + encodeURIComponent('type') + '=' + encodeURIComponent('json'); // JSON
-		
-		xhr.open('GET', url + queryParams);
-		xhr.onreadystatechange = function () {
-		    if (this.readyState == 4) {
-		        var data = JSON.parse(this.responseText);
-		        var items = data.response.body.items;
-		        for (var i = 0; i < items.length; i++) {
-		            var item = items[i];
-		            var marker = new kakao.maps.Marker({
-		                position: new kakao.maps.LatLng(item.latitude, item.longitude), // 마커의 좌표
-                        map: map // 마커를 표시할 지도 객체
+    <script>
+        // 시/도 선택에 따른 하위 행정구역 표시
+        function displayCity(province) {
+            var citySelect = document.getElementById("citySelect");
+
+            // Clear any existing options
+            citySelect.innerHTML = "";
+
+            if (province === "서울특별시") {
+                // 서울특별시 하위 행정구역
+                citySelect.innerHTML += "<option value='강남구'>강남구</option>";
+                citySelect.innerHTML += "<option value='강동구'>강동구</option>";
+                citySelect.innerHTML += "<option value='강북구'>강북구</option>";
+                citySelect.innerHTML += "<option value='강서구'>강서구</option>";
+                citySelect.innerHTML += "<option value='관악구'>관악구</option>";
+                citySelect.innerHTML += "<option value='광진구'>광진구</option>";
+                citySelect.innerHTML += "<option value='구로구'>구로구</option>";
+                citySelect.innerHTML += "<option value='금천구'>금천구</option>";
+                citySelect.innerHTML += "<option value='노원구'>노원구</option>";
+                citySelect.innerHTML += "<option value='도봉구'>도봉구</option>";
+                citySelect.innerHTML += "<option value='동대문구'>동대문구</option>";
+                citySelect.innerHTML += "<option value='동작구'>동작구</option>";
+                citySelect.innerHTML += "<option value='마포구'>마포구</option>";
+                citySelect.innerHTML += "<option value='서대문구'>서대문구</option>";
+                citySelect.innerHTML += "<option value='서초구'>서초구</option>";
+                citySelect.innerHTML += "<option value='성동구'>성동구</option>";
+                citySelect.innerHTML += "<option value='성북구'>성북구</option>";
+                citySelect.innerHTML += "<option value='송파구'>송파구</option>";
+                citySelect.innerHTML += "<option value='양천구'>양천구</option>";
+                citySelect.innerHTML += "<option value='영등포구'>영등포구</option>";
+                citySelect.innerHTML += "<option value='용산구'>용산구</option>";
+                citySelect.innerHTML += "<option value='은평구'>은평구</option>";
+                citySelect.innerHTML += "<option value='종로구'>종로구</option>";
+                citySelect.innerHTML += "<option value='중구'>중구</option>";
+                citySelect.innerHTML += "<option value='중랑구'>중랑구</option>";
+                // add other cities in 서울특별시
+            } else if (province === "부산광역시") {
+                // 부산광역시 하위 행정구역
+                citySelect.innerHTML += "<option value='강서구'>강서구</option>";
+                citySelect.innerHTML += "<option value='금정구'>금정구</option>";
+                citySelect.innerHTML += "<option value='기장군'>기장군</option>";
+                citySelect.innerHTML += "<option value='남구'>남구</option>";
+                citySelect.innerHTML += "<option value='동구'>동구</option>";
+                citySelect.innerHTML += "<option value='동래구'>동래구</option>";
+                citySelect.innerHTML += "<option value='부산진구'>부산진구</option>";
+                citySelect.innerHTML += "<option value='북구'>북구</option>";
+                citySelect.innerHTML += "<option value='사상구'>사상구</option>";
+                citySelect.innerHTML += "<option value='사하구'>사하구</option>";
+                citySelect.innerHTML += "<option value='서구'>서구</option>";
+                citySelect.innerHTML += "<option value='수영구'>수영구</option>";
+                citySelect.innerHTML += "<option value='연제구'>연제구</option>";
+                citySelect.innerHTML += "<option value='영도구'>영도구</option>";
+                citySelect.innerHTML += "<option value='중구'>중구</option>";
+                citySelect.innerHTML += "<option value='해운대구'>해운대구</option>";
+                // add other cities in 부산광역시
+            }
+            // Add similar if conditions for other provinces
+        }
+
+        // 행정구역 선택에 따른 소방시설 표시
+        function displayFacilities(city) {
+            var province = document.getElementById("provinceSelect").value;
+            fetch('http://api.data.go.kr/openapi/tn_pubr_public_ffus_wtrcns_api?' +
+                'serviceKey=y56nrcR50aqQCfbrW4zNSkIQjCQR10mfxAQxmNDOPnT4N%2FBZ0g5jXFaJ0%2FSsXyzrZrvZEmh23Ryp1fCpH4RIeQ%3D%3D&' +
+                'pageNo=1&numOfRows=3000&type=json&CTPRVN_NM=' + province + '&SIGNGU_NM=' + city)
+                .then(response => response.json())
+                .then(data => {
+                    var items = data.response.body.items;
+                    for (var i = 0; i < items.length; i++) {
+                        var item = items[i];
+                        console.log(data)
+                        var marker = new kakao.maps.Marker({
+                            position: new kakao.maps.LatLng(item.latitude, item.longitude),
+                            map: map
                         });
                     }
-                }
-            };
-            xhr.send('');
+                });
+        }
+    </script>
 
-</script>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d882269976572c582016903ea3e8c781&libraries=services"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        var mapContainer = document.getElementById('map');
+        var mapOption = {
+            center: new kakao.maps.LatLng(37.56682, 126.97865),
+            level: 8,
+            mapTypeId: kakao.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+    </script>
 </body>
+
 </html>
