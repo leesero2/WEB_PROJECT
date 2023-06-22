@@ -64,26 +64,6 @@ function loadFireStationData() {
     });
 }
 
-// 건물 데이터를 로드하는 함수
-function loadBuildingData() {
-    return new Promise(function (resolve, reject) {
-        $.ajax({
-            url: 'new_부산_금정구.csv',
-            dataType: 'text',
-            success: function (data) {
-                $.csv.toObjects(data, {}, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        dataBuildings = data;
-                        resolve();
-                    }
-                });
-            },
-            error: reject
-        });
-    });
-}
 
 // 건물의 화재위험지수를 계산하는 함수
 function calculateBuildingScore(building) {
@@ -259,8 +239,8 @@ function processMap() {
     Promise.all([loadBuildingData(), loadFireStationData()])
         .then(function () {
             // dataBuildings에서 모든 건물을 순회하며 위험한 건물과 매우 위험한 건물에 대해 마커를 생성하고 지도에 표시합니다.
-            //for (let i = 0; i < Math.min(250, dataBuildings.length); i++) { //테스트용으로 300개만 실행시키는 반복문 
-                 for (var i = 0; i < dataBuildings.length; i++) { //이게 모든 건물을 출력하는 반복문
+            for (let i = 0; i < Math.min(450, dataBuildings.length); i++) { //테스트용으로 300개만 실행시키는 반복문 
+              //   for (var i = 0; i < dataBuildings.length; i++) { //이게 모든 건물을 출력하는 반복문
                 var building = dataBuildings[i];
                 var buildingScore = calculateBuildingScore(building);
                 var safetyLevel = classifySafetyLevel(buildingScore);
