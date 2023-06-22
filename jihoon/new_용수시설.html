@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>소방 용수 시설</title>
+    <title>카카오 지도 API</title>
     <style>
         #selectedValues {
             border: 2px solid black;
@@ -14,10 +14,11 @@
             border-radius: 10px;
         }
     </style>
+    <link href="css/styles.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div id="map" style="width:100%;height:500px;"></div>
+    <div id="map" style="width:100%;height:450px;"></div>
 
     <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d882269976572c582016903ea3e8c781&libraries=services"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -32,7 +33,7 @@
         var map = new kakao.maps.Map(mapContainer, mapOption);
     </script>
 
-    <select id="provinceSelect" onchange="displayCity(this.value)">
+    <select id="provinceSelect" class="form-select" onchange="displayCity(this.value)">
         <option>선택하세요</option>
         <option value="서울특별시">서울특별시</option>
         <option value="부산광역시">부산광역시</option>
@@ -53,10 +54,11 @@
         <option value="세종특별자치시">세종특별자치시</option>
     </select>
 
-    <select id="citySelect" onchange="displayFacilities(this.value)">
+    <select id="citySelect" class="form-select" onchange="displayFacilities(this.value)">
     </select>
 
-    <div id="selectedValues"></div>
+    <!-- <div id="selectedValues" class="card-body bg-content-color" ></div> -->
+    <p id="selectedValues" class="card-text text-center"></p>
 
 
     <script>
