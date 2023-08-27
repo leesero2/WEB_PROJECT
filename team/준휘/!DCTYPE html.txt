@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>화재 발생 빈도수 막대그래프</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <style>
+    #detail p {
+      margin: 0;
+      padding: 5px 0;
+      border-bottom: 1px solid #ccc;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    #detail p span {
+      display: inline-block;
+      margin-right: 2px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <canvas id="myChart"></canvas>
+  </div>
+  <div id="detail"></div>
+
+  <form id="regionForm">
+    <label for="region1">지역 1:</label>
+    <select id="region1" name="region1">
+      <option value="" selected disabled hidden>지역 선택</option>
+    </select>
+
+    <label for="city1">시군구 1:</label>
+    <select id="city1" name="city1">
+      <option value="" selected disabled hidden>시군구 선택</option>
+    </select>
+
+    <label for="region2">지역 2:</label>
+    <select id="region2" name="region2">
+      <option value="" selected disabled hidden>지역 선택</option>
+    </select>
+
+    <label for="city2">시군구 2:</label>
+    <select id="city2" name="city2">
+      <option value="" selected disabled hidden>시군구 선택</option>
+    </select>
+
+    <button type="submit">비교하기</button>
+  </form>
+
+  <script>
+    var csvUrl = '소방청_화재발생 정보_20211231.csv';
+    var fireFrequency = {};
+    var data;
+    var selectedRegions = [];
+
+    Papa.parse(csvUrl, {
+      download: true,
+      header: true,
+      complete: function(results) {
+        data = results.data;
+        populateRegionOptions();
+        createProvinceChart();
+      }
+    });
+
+    function populateRegionOptions() {
+      var regions = [...new Set(data.map(row => row['시도']))];
+      var region1Select = document.getElementById('region1');
+      var region2Select = document.getElementById('region2');
+
+      regions.forEach(function(region) {
+        var option1 = document.createElement('option');
+        option1.value = region;
+        option1.textContent = region;
+        region1Select.appendChild(option1);
+
+        var option2 = document.createElement('option');
+        option2.value = region;
+        option2.textContent = region;
+        region2Select.appendChild(option2);
+      });
+    }
+
+    document.getElementById('regionForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var region1 = document.getElementById('region1').value;
+      var city1 = document.getElementById('city1').value;
+      var region2 = document.getElementById('region2').value;
+      var city2 = document.getElementById('city2').value;
+
+      if (region1 && city1 && region2 && city2) {
+        selectedRegions = [
+          { region: region1, city: city1 },
+          { region: region2, city: city2 }
+        ];
+        createComparisonChart();
+      } else {
+        alert('두 지역을 선택하세요.');
+      }
+    });
+
+    function populateCityOptions(region, citySelectId) {
+      var cities = [...new Set(data.filter(row => row['시도'] === region).map(row => row['시군구']))];
+      var citySelect = document.getElementById(citySelectId);
+      citySelect.innerHTML = '';
+
+      var defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = '시군구 선택';
+      defaultOption.selected = true;
+      defaultOption.disabled = true;
+      defaultOption.hidden = true;
+      citySelect.appendChild(defaultOption);
+
+      cities.forEach(function(city) {
+        var option = document.createElement('option');
+        option.value = city;
+        option.textContent = city;
+        citySelect.appendChild(option);
+      });
+    }
+
+    document.getElementById('region1').addEventListener('change', function() {
+      var selectedRegion = this.value;
+      populateCityOptions(selectedRegion, 'city1');
+    });
+
+    document.getElementById('region2').addEventListener('change', function() {
+      var selectedRegion = this.value;
+      populateCityOptions(selectedRegion, 'city2');
+    });
+
+    function createProvinceChart() {
+      fireFrequency = {};
+      data.forEach(function(row) {
+        var region = row['시도'];
+        if (!(region in fireFrequency)) {
+          fireFrequency[region] = 0;
+        }
+        fireFrequency[region]++;
+      });
+
+      createChart(
+        Object.keys(fireFrequency),
+        Object.values(fireFrequency),
+        '시도별 화재 발생 빈도',
+        function(event, array) {
+          if (array.length === 0) return;
+          var label = this.data.labels[array[0]._index];
+          createCityChart(label);
+        }
+      );
+    }
+
+    function createCityChart(province) {
+      fireFrequency = {};
+      data.forEach(function(row) {
+        if (row['시도'] !== province) return;
+        var city = row['시군구'];
+        if (!(city in fireFrequency)) {
+          fireFrequency[city] = 0;
+        }
+        fireFrequency[city]++;
+      });
+
+      createChart(
+        Object.keys(fireFrequency),
+        Object.values(fireFrequency),
+        province + ' 화재 발생 빈도',
+        function(event, array) {
+          if (array.length === 0) return;
+          var label = this.data.labels[array[0]._index];
+          createDetailChart(province, label);
+        }
+      );
+    }
+
+    function createDetailChart(province, city) {
+      var detailData = data.filter(function(row) {
+        return row['시도'] === province && row['시군구'] === city;
+      });
+
+      var detailContainer = document.getElementById('detail');
+      detailContainer.innerHTML = '';
+
+      detailData.forEach(function(row) {
+        var p = document.createElement('p');
+        p.innerHTML = '<span>발생일:</span>' + row['화재발생년월일']
+          + '<span>피해액:</span> ' + row['재산피해소계'] + '만원 (부동산: ' + row['부동산'] + '만원, 동산: ' + row['동산'] + '만원)'
+          + '<span>인명피해:</span> ' + row['인명피해소계'] + '명 (사망: ' + row['사망'] + '명, 부상: ' + row['부상'] + '명)'
+          + '<span>장소분류:</span> ' + row['장소대분류'] + ' --> ' + row['장소중분류'] + ' --> ' + row['장소소분류'];
+
+        detailContainer.appendChild(p);
+      });
+    }
+
+    function createChart(labels, dataset, label, callback) {
+  var ctx = document.getElementById('myChart');
+  if (window.myChart instanceof Chart) {
+    window.myChart.destroy();
+  }
+  
+  var backgroundColors = [];
+  var borderColors = [];
+  
+  for (var i = 0; i < dataset.length; i++) {
+    var color = getRandomColor();
+    backgroundColors.push(color.alpha(0.2).rgbString());
+    borderColors.push(color.rgbString());
+  }
+  
+  window.myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: label,
+        data: dataset,
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      },
+      onClick: function(event, array) {
+        if (array.length === 0) return;
+        var label = this.data.labels[array[0]._index];
+        createDetailChart(label);
+      }
+    }
+  });
+}
+
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return Chart.helpers.color(color);
+}
+
+// createDetailChart 함수는 기존 코드에서 가져옵니다.
+
+function createDetailChart(label) {
+  var region = label.split(' ')[0];
+  var city = label.split(' ')[1];
+
+  var detailData = data.filter(function(row) {
+    return row['시도'] === region && row['시군구'] === city;
+  });
+
+  var detailContainer = document.getElementById('detail');
+  detailContainer.innerHTML = '';
+
+  detailData.forEach(function(row) {
+    var p = document.createElement('p');
+    p.innerHTML = '<span>발생일:</span>' + row['화재발생년월일']
+      + '<span>피해액:</span> ' + row['재산피해소계'] + '만원 (부동산: ' + row['부동산'] + '만원, 동산: ' + row['동산'] + '만원)'
+      + '<span>인명피해:</span> ' + row['인명피해소계'] + '명 (사망: ' + row['사망'] + '명, 부상: ' + row['부상'] + '명)'
+      + '<span>장소분류:</span> ' + row['장소대분류'] + ' --> ' + row['장소중분류'] + ' --> ' + row['장소소분류'];
+
+    detailContainer.appendChild(p);
+  });
+}
+
+    function createComparisonChart() {
+  var selectedData = data.filter(function(row) {
+    return selectedRegions.some(region => row['시도'] === region.region && row['시군구'] === region.city);
+  });
+
+  var fireFrequency = {};
+  selectedData.forEach(function(row) {
+    var region = row['시도'];
+    var city = row['시군구'];
+    var key = region + ' ' + city; // 시도와 시군구를 조합한 키 생성
+    if (!(key in fireFrequency)) {
+      fireFrequency[key] = 0;
+    }
+    fireFrequency[key]++;
+  });
+
+  var labels = Object.keys(fireFrequency);
+  var dataset = Object.values(fireFrequency);
+
+  createChart(
+    labels,
+    dataset,
+    '지역별 화재 발생 빈도',
+    null
+  );
+}
+  </script>
+</body>
+</html>
